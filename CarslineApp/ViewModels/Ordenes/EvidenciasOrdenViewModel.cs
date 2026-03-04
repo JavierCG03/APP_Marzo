@@ -1,6 +1,7 @@
 ﻿using CarslineApp.Models;
 using CarslineApp.Services;
 using CarslineApp.Views;
+using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -293,7 +294,7 @@ namespace CarslineApp.ViewModels
                 await Application.Current.MainPage.DisplayAlert("Error", $"Error al seleccionar imagen: {ex.Message}", "OK");
             }
         }
-
+   
         private async Task ProcesarImagen(FileResult photo, string tipo)
         {
             var evidencia = Evidencias.FirstOrDefault(e => e.Descripcion == tipo);
@@ -304,19 +305,129 @@ namespace CarslineApp.ViewModels
                 using var memoryStream = new MemoryStream();
                 await stream.CopyToAsync(memoryStream);
 
-                evidencia.ImagenBytes = memoryStream.ToArray();
+
+                var imagenOriginal = memoryStream.ToArray();
+
+                evidencia.ImagenBytes = await ComprimirImagen(imagenOriginal, calidadJpeg: 80, anchoMaximo: 1280);
                 evidencia.NombreArchivo = photo.FileName;
                 evidencia.TieneImagen = true;
 
-                // Convertir a ImageSource para preview
                 evidencia.ImagenPreview = ImageSource.FromStream(() => new MemoryStream(evidencia.ImagenBytes));
 
                 MensajeEstado = $"Imagen {tipo} capturada correctamente";
                 ((Command)GuardarEvidenciasCommand).ChangeCanExecute();
             }
         }
+        private async Task<byte[]> ComprimirImagen(byte[] imagenOriginal, int calidadJpeg = 80, int anchoMaximo = 1280)
+        {
+            try
+            {
+                var skBitmap = SKBitmap.Decode(imagenOriginal);
+                if (skBitmap == null) return imagenOriginal;
 
+                // ✅ NUEVO: Leer orientación EXIF
+                int rotacionGrados = ObtenerRotacionExif(imagenOriginal);
 
+                // Calcular tamaño según orientación
+                // Si la rotación es 90° o 270°, ancho y alto se invierten
+                bool estaRotada = rotacionGrados == 90 || rotacionGrados == 270;
+                int anchoReal = estaRotada ? skBitmap.Height : skBitmap.Width;
+                int altoReal = estaRotada ? skBitmap.Width : skBitmap.Height;
+
+                int nuevoAncho = anchoReal;
+                int nuevoAlto = altoReal;
+
+                if (anchoReal > anchoMaximo)
+                {
+                    float escala = (float)anchoMaximo / anchoReal;
+                    nuevoAncho = anchoMaximo;
+                    nuevoAlto = (int)(altoReal * escala);
+                }
+
+                // Redimensionar
+                SKBitmap bitmapRedim = skBitmap;
+                if (nuevoAncho != skBitmap.Width || nuevoAlto != skBitmap.Height)
+                {
+                    // Si está rotada, redimensionar con dimensiones corregidas
+                    var infoDestino = estaRotada
+                        ? new SKImageInfo(nuevoAlto, nuevoAncho)   // invertidas para rotar después
+                        : new SKImageInfo(nuevoAncho, nuevoAlto);
+
+                    bitmapRedim = skBitmap.Resize(infoDestino, SKFilterQuality.Medium);
+                }
+
+                // ✅ NUEVO: Aplicar rotación si es necesaria
+                SKBitmap bitmapFinal = AplicarRotacion(bitmapRedim, rotacionGrados);
+
+                // Comprimir a JPEG
+                using var image = SKImage.FromBitmap(bitmapFinal);
+                using var data = image.Encode(SKEncodedImageFormat.Jpeg, calidadJpeg);
+                var resultado = data.ToArray();
+
+                System.Diagnostics.Debug.WriteLine(
+                    $"🗜️ Compresión: {imagenOriginal.Length / 1024}KB → {resultado.Length / 1024}KB " +
+                    $"({100 - (resultado.Length * 100 / imagenOriginal.Length)}% reducción) " +
+                    $"| Rotación aplicada: {rotacionGrados}°");
+
+                // Liberar memoria
+                if (!ReferenceEquals(bitmapRedim, skBitmap)) bitmapRedim.Dispose();
+                if (!ReferenceEquals(bitmapFinal, bitmapRedim)) bitmapFinal.Dispose();
+                skBitmap.Dispose();
+
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"⚠️ Error al comprimir imagen: {ex.Message}");
+                return imagenOriginal;
+            }
+        }
+
+        // ─── Lee la orientación EXIF desde los bytes originales ───────────────────
+        private int ObtenerRotacionExif(byte[] imageBytes)
+        {
+            try
+            {
+                using var ms = new MemoryStream(imageBytes);
+                using var managedStream = new SKManagedStream(ms);
+                using var codec = SKCodec.Create(managedStream);
+
+                if (codec == null) return 0;
+
+                return codec.EncodedOrigin switch
+                {
+                    SKEncodedOrigin.RightTop => 90,   // Portrait normal
+                    SKEncodedOrigin.BottomRight => 180,  // Boca abajo
+                    SKEncodedOrigin.LeftBottom => 270,  // Portrait invertido
+                    _ => 0     // Landscape o sin rotación
+                };
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // ─── Rota el bitmap los grados indicados ──────────────────────────────────
+        private SKBitmap AplicarRotacion(SKBitmap bitmap, int grados)
+        {
+            if (grados == 0) return bitmap;
+
+            // Para 90 y 270, ancho y alto se intercambian
+            bool intercambiar = grados == 90 || grados == 270;
+            int nuevoAncho = intercambiar ? bitmap.Height : bitmap.Width;
+            int nuevoAlto = intercambiar ? bitmap.Width : bitmap.Height;
+
+            var rotado = new SKBitmap(nuevoAncho, nuevoAlto);
+
+            using var canvas = new SKCanvas(rotado);
+            canvas.Translate(nuevoAncho / 2f, nuevoAlto / 2f);
+            canvas.RotateDegrees(grados);
+            canvas.Translate(-bitmap.Width / 2f, -bitmap.Height / 2f);
+            canvas.DrawBitmap(bitmap, 0, 0);
+
+            return rotado;
+        }
 
         private async Task EliminarEvidencia(EvidenciaItem evidencia)
         {

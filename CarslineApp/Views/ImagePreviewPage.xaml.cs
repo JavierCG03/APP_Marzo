@@ -237,24 +237,19 @@ namespace CarslineApp.Views
                 yOffset = targetY;
             }
         }
+ 
         private void ClampPanBounds(ref double x, ref double y)
         {
-            if (PreviewImage.Width <= 0 || PreviewImage.Height <= 0)
-                return;
+            var container = this.Content as Layout;
+            double containerWidth = ImageContainer.Width;   // Referencia directa al Grid/Layout
+            double containerHeight = ImageContainer.Height;
 
-            double scaledWidth = PreviewImage.Width * currentZoom;
-            double scaledHeight = PreviewImage.Height * currentZoom;
+            double excess_x = (PreviewImage.Width * currentZoom - containerWidth) / 2;
+            double excess_y = (PreviewImage.Height * currentZoom - containerHeight) / 2;
 
-            double containerWidth = this.Width;
-            double containerHeight = this.Height - HEADER_HEIGHT - FOOTER_HEIGHT;
-
-            double maxX = Math.Max(0, (scaledWidth - containerWidth) / 2);
-            double maxY = Math.Max(0, (scaledHeight - containerHeight) / 2);
-
-            x = Math.Clamp(x, -maxX, maxX);
-            y = Math.Clamp(y, -maxY, maxY);
+            x = Math.Clamp(x, -Math.Max(0, excess_x), Math.Max(0, excess_x));
+            y = Math.Clamp(y, -Math.Max(0, excess_y), Math.Max(0, excess_y));
         }
-
 
         // ═══ UTILIDADES ═══
 

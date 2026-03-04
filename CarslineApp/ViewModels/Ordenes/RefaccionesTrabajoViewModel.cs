@@ -56,6 +56,7 @@ namespace CarslineApp.ViewModels.Ordenes
             AgregarPredeterminadaCommand = new Command<RefaccionPredeterminadaViewModel>(async (r) => await AgregarRefaccionPredeterminada(r));
             CalcularManoObraCommand = new Command(CalcularManoObraDesdeTotal);
             BackCommand = new Command(async () => await RegresarAtras());
+            TransferirRefaccionCommand = new Command<RefaccionCitaViewModel>(async (r) => await TransferirRefaccion(r));
             AplicarManoObraCalculadaCommand = new Command(async () => await AplicarManoObraCalculada(),
                 () => HayManoObraCalculada);
         }
@@ -221,6 +222,7 @@ namespace CarslineApp.ViewModels.Ordenes
         public ICommand AgregarPredeterminadaCommand { get; }
         public ICommand CalcularManoObraCommand { get; }
         public ICommand AplicarManoObraCalculadaCommand { get; }
+        public ICommand TransferirRefaccionCommand { get; }
         public ICommand BackCommand { get; }
 
         #endregion
@@ -282,7 +284,7 @@ namespace CarslineApp.ViewModels.Ordenes
                     new() { Nombre = "Aceite de motor",           Cantidad = null }, // variable
                     new() { Nombre = "Filtro de aceite",          Cantidad = 1 },
                     new() { Nombre = "Filtro de Aire de Motor",   Cantidad = 1 },
-                    new() { Nombre = "Filtro de Aire de Polen",   Cantidad = 1 },
+                    new() { Nombre = "Filtro de Aire Polen",   Cantidad = 1 },
                 };
 
             // --- Balatas delanteras ---
@@ -594,6 +596,50 @@ namespace CarslineApp.ViewModels.Ordenes
                 System.Diagnostics.Debug.WriteLine($"❌ {ex.Message}");
                 await MostrarAlerta("Error", "No se pudo actualizar la mano de obra");
                 PrecioManoObraTexto = _manoObraOriginal.ToString("F2");
+            }
+            finally { EstaCargando = false; }
+        }
+        // ── 3. Agrega este método privado (dentro de #region Métodos Privados) ──
+        private async Task TransferirRefaccion(RefaccionCitaViewModel refaccion)
+        {
+            if (refaccion == null) return;
+
+            // Validar precio de venta ingresado
+            if (string.IsNullOrWhiteSpace(refaccion.PrecioVentaTexto) ||
+                !decimal.TryParse(refaccion.PrecioVentaTexto, out decimal precioVenta) ||
+                precioVenta <= 0)
+            {
+                await MostrarAlerta("Precio requerido",
+                    $"Ingresa un precio de venta válido para:\n{refaccion.Nombre}");
+                return;
+            }
+
+            bool confirmar = await Application.Current.MainPage.DisplayAlert(
+                "Confirmar transferencia",
+                $"¿Transferir \"{refaccion.Nombre}\" con precio de venta ${precioVenta:N2}?",
+                "Sí, transferir", "Cancelar");
+            if (!confirmar) return;
+
+            EstaCargando = true;
+            try
+            {
+                var response = await _apiService.TransferirRefaccionComprada(refaccion.Id, precioVenta);
+                if (response.Success)
+                {
+                    // Recargar la lista de compradas y de trabajo
+                    await CargarRefaccionesCompradas();
+                    await CargarRefacciones();
+                    await MostrarAlerta("✅ Éxito", "Refacción transferida correctamente");
+                }
+                else
+                {
+                    await MostrarAlerta("Error", response.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ Error al transferir: {ex.Message}");
+                await MostrarAlerta("Error", "No se pudo transferir la refacción");
             }
             finally { EstaCargando = false; }
         }

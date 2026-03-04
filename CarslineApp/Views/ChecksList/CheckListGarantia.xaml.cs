@@ -142,14 +142,12 @@ public partial class CheckListGarantia : ContentPage
 
         if (!string.IsNullOrWhiteSpace(txtComentarioReparacion.Text))
         {
-            sb.AppendLine("Fallas detectadas:");
-            sb.AppendLine(txtComentarioReparacion.Text.Trim());
+            sb.AppendLine($"- Fallas detectadas: {txtComentarioReparacion.Text.Trim()}");
         }
 
         if (!string.IsNullOrWhiteSpace(txtComentarioGeneral.Text))
         {
-            sb.AppendLine("Reparaciones realizadas:");
-            sb.AppendLine(txtComentarioGeneral.Text.Trim());
+            sb.AppendLine($"- Reparaciones realizadas: {txtComentarioGeneral.Text.Trim()}");
         }
 
         return sb.ToString().Trim();

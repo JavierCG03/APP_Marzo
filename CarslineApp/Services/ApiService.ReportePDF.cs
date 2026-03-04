@@ -5,9 +5,6 @@ namespace CarslineApp.Services
 {
     public partial class ApiService
     {
-        /// <summary>
-        /// Descargar PDF de una orden
-        /// </summary>
         public async Task<DescargarPdfResponse> DescargarPdfOrdenAsync(int ordenId)
         {
             try
@@ -17,7 +14,11 @@ namespace CarslineApp.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var pdfBytes = await response.Content.ReadAsByteArrayAsync();
-                    var fileName = $"Orden_{ordenId}_{DateTime.Now:yyyyMMdd}.pdf";
+
+                    string fileName = response.Content.Headers.ContentDisposition?.FileNameStar
+                                   ?? response.Content.Headers.ContentDisposition?.FileName
+                                   ?? $"Orden_{ordenId}_{DateTime.Now:yyyyMMdd}.pdf";
+                    fileName = fileName.Trim('"');
 
                     return new DescargarPdfResponse
                     {
@@ -43,7 +44,6 @@ namespace CarslineApp.Services
                 };
             }
         }
-
         public async Task<PdfPreviewResponse> ObtenerVistaPreviaPdfAsync(int ordenId)
         {
             try

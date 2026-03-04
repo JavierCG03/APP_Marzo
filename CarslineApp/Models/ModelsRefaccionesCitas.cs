@@ -250,13 +250,23 @@ namespace CarslineApp.Models
         public bool TieneRefacciones => Trabajos.Any(t => t.TieneRefacciones);
     }
 
+    // ══════════════════════════════════════════════════════════════════
+    // REEMPLAZA la clase RefaccionCitaViewModel en tu archivo de modelos
+    // ══════════════════════════════════════════════════════════════════
+
     public class RefaccionCitaViewModel : INotifyPropertyChanged
     {
         private readonly RefaccionCompradaDto _dto;
+        private string _precioVentaTexto = string.Empty;
 
         public RefaccionCitaViewModel(RefaccionCompradaDto dto)
         {
             _dto = dto;
+
+            // Si ya tiene precio de venta, lo precargamos
+            _precioVentaTexto = dto.PrecioVenta.HasValue
+                ? dto.PrecioVenta.Value.ToString("F2")
+                : string.Empty;
         }
 
         public int Id => _dto.Id;
@@ -267,11 +277,18 @@ namespace CarslineApp.Models
         public string TotalCostoFormateado => _dto.TotalCostoFormateado;
         public string TotalVentaFormateado => _dto.TotalVentaFormateado;
         public bool Transferida => _dto.Transferida;
+        public bool PuedeTransferir => !_dto.Transferida;   // controla visibilidad en XAML
         public bool PuedeEditar => !_dto.Transferida;
         public decimal? PrecioVentaRaw => _dto.PrecioVenta;
         public bool TienePrecioVenta => _dto.PrecioVenta.HasValue;
 
-        // Color visual según si ya fue transferida
+        // Campo editable para ingresar precio de venta
+        public string PrecioVentaTexto
+        {
+            get => _precioVentaTexto;
+            set { _precioVentaTexto = value; OnPropertyChanged(); }
+        }
+
         public string ColorEstado => _dto.Transferida ? "#43A047" : "#FB8C00";
         public string TextoEstado => _dto.Transferida ? "✔ Transferida" : "⏳ Pendiente";
 

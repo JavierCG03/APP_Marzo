@@ -146,16 +146,13 @@ public partial class CheckListDiagnostico : ContentPage
 
         if (!string.IsNullOrWhiteSpace(txtComentarioReparacion.Text))
         {
-            sb.AppendLine("Fallas detectadas:");
-            sb.AppendLine(txtComentarioReparacion.Text.Trim());
+            sb.AppendLine($"- Fallas detectadas: {txtComentarioReparacion.Text.Trim()}");
         }
 
         if (!string.IsNullOrWhiteSpace(txtComentarioGeneral.Text))
         {
-            sb.AppendLine("Reparaciones necesarias:");
-            sb.AppendLine(txtComentarioGeneral.Text.Trim());
+            sb.AppendLine($"- Reparaciones necesarias: {txtComentarioGeneral.Text.Trim()}");
         }
-
         return sb.ToString().Trim();
     }
     protected override async void OnDisappearing()

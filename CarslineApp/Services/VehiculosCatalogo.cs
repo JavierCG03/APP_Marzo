@@ -12,6 +12,19 @@ namespace CarslineApp.Services
     public static class VehiculosCatalogo
     {
         // ══════════════════════════════════════════════════════════════════════
+        //  TIPOS DE CARROCERÍA
+        // ══════════════════════════════════════════════════════════════════════
+        public enum TipoCarroceria
+        {
+            HATCHBACK,
+            SEDAN,
+            SUV,
+            MINIVAN,
+            PICKUP,
+            AUTOSTURBO
+        }
+
+        // ══════════════════════════════════════════════════════════════════════
         //  CATÁLOGO  Marca → Modelo → Lista de Versiones
         // ══════════════════════════════════════════════════════════════════════
         private static readonly Dictionary<string, Dictionary<string, List<string>>> _catalogo =
@@ -107,16 +120,25 @@ namespace CarslineApp.Services
                 // ─────────────────────────────────────────────────────────────────
                 ["Nissan"] = new(StringComparer.OrdinalIgnoreCase)
                 {
+                    // ── Sedanes ─────────────────────────────────────────────────────────
                     ["Altima"] = new() { "S", "SV", "SR", "SL", "Platinum" },
                     ["Sentra"] = new() { "S", "SV", "SR", "SR Midnight", "SL" },
                     ["Versa"] = new() { "S", "SV", "SR", "Advance", "Exclusive" },
-                    ["Versa Note"] = new() { "S", "SV", "SR" },
-                    ["March"] = new() { "Sense", "Advance", "SR", "Nismo" },
                     ["Tiida"] = new() { "Sense", "Advance", "Exclusive" },
                     ["Maxima"] = new() { "S", "SV", "SR", "Platinum" },
                     ["Sylphy"] = new() { "Sense", "Advance", "Exclusive" },
                     ["Almera"] = new() { "S", "SV", "SR" },
                     ["Sunny"] = new() { "S", "SV", "SL" },
+
+                    // ── Hatchbacks ──────────────────────────────────────────────────────
+                    ["March"] = new() { "Sense", "Advance", "SR", "Nismo" },
+                    ["Versa Note"] = new() { "S", "SV", "SR" },
+                    ["Micra"] = new() { "Visia", "Acenta", "N-Sport", "Tekna" },
+                    ["Note"] = new() { "Sense", "Advance", "Exclusive" },
+                    ["Leaf"] = new() { "S", "SV", "SV Plus", "SL Plus" },
+
+                    // ── SUVs / CUVs ─────────────────────────────────────────────────────
+                    ["Juke"] = new() { "S", "SV", "SL", "Nismo" },
                     ["Kicks"] = new() { "Sense", "Advance", "Exclusive", "SR" },
                     ["Kicks Play"] = new() { "Sense", "Advance" },
                     ["Qashqai"] = new() { "Sense", "Advance", "Exclusive" },
@@ -127,38 +149,63 @@ namespace CarslineApp.Services
                     ["Pathfinder"] = new() { "S", "SV", "SL", "Rock Creek", "Platinum" },
                     ["Armada"] = new() { "SV", "SL", "Midnight Edition", "Platinum" },
                     ["Terrano"] = new() { "Sense", "Advance", "Exclusive" },
-                    ["Juke"] = new() { "S", "SV", "SL", "Nismo" },
                     ["Ariya"] = new() { "Engage", "Evolve", "Empower", "Platinum+" },
+                    ["Ariya e-4ORCE"] = new() { "Engage", "Evolve", "Platinum+" },
+                    ["Patrol"] = new() { "SE", "XE", "LE", "Platinum" },
+                    ["Xterra"] = new() { "S", "SE", "PRO-4X" },
+
+                    // ── Pickups ─────────────────────────────────────────────────────────
                     ["Frontier"] = new() { "S", "SV", "PRO-4X", "Pro-X", "Platinum" },
                     ["NP300"] = new() { "SE", "XE", "LE", "Platinum", "Pro-4X" },
                     ["Navara"] = new() { "S", "SE", "LE", "Pro-4X" },
                     ["Titan"] = new() { "S", "SV", "PRO-4X", "Platinum Reserve" },
+
+                    // ── Deportivos ──────────────────────────────────────────────────────
                     ["370Z"] = new() { "Base", "Sport", "Nismo" },
                     ["400Z"] = new() { "Sport", "Performance", "Nismo" },
                     ["GT-R"] = new() { "Premium", "Track Edition", "Nismo" },
-                    ["Leaf"] = new() { "S", "SV", "SV Plus", "SL Plus" },
-                    ["Ariya e-4ORCE"] = new() { "Engage", "Evolve", "Platinum+" },
+
+                    // ── Minivans / Vans ─────────────────────────────────────────────────
                     ["Urvan"] = new() { "Panel", "Panel Ventanas", "11 Pasajeros", "14 Pasajeros" },
                     ["NV200"] = new() { "S", "SV" },
                     ["NV350"] = new() { "Panel", "Pasajeros" },
-                }, 
+                },
                 // ─────────────────────────────────────────────────────────────────
                 ["Toyota"] = new(StringComparer.OrdinalIgnoreCase)
                 {
-                    ["4Runner"] = new() { "SR5", "TRD Off-Road", "TRD Pro", "Limited", "Venture" },
+                    // ── Sedanes ─────────────────────────────────────────────────────────
                     ["Camry"] = new() { "LE", "SE", "XLE", "XSE", "TRD" },
                     ["Corolla"] = new() { "Base CVT", "LE CVT", "XLE CVT", "SE CVT", "LE HEV", "XLE HEV" },
+                    ["Corolla Cross"] = new() { "S", "SE", "XLE", "Hybrid LE", "Hybrid XLE" },
+                    ["Prius"] = new() { "LE", "XLE", "Limited", "Prime LE", "Prime XLE" },                    
+                    ["Yaris Sedan"] = new() { "S", "S CVT", "GR Sport" },
+
+                    // ── Hatchbacks ──────────────────────────────────────────────────────
+                    ["Yaris Hatchback"] = new() { "S", "S CVT", "GR Sport", "GR" },
+                    ["Yaris GR"] = new() { "Circuit", "Rally" },
+                    ["Prius C"] = new() { "Base", "L", "LE", "XLE" },
+                    ["GR86"] = new() { "Base", "Premium" },
+
+                    // ── CUVs / SUVs ─────────────────────────────────────────────────────
+                    ["4Runner"] = new() { "SR5", "TRD Off-Road", "TRD Pro", "Limited", "Venture" },
+                    ["bZ4X"] = new() { "XLE", "Limited" },
+                    ["C-HR"] = new() { "LE", "XLE", "Limited" },
+                    ["Crown"] = new() { "XLE", "Limited", "Platinum" },
                     ["Fortuner"] = new() { "SR", "SR5", "SRV", "GR-S" },
-                    ["Hilux"] = new() { "DX", "SR", "SRV", "GR-S" },
                     ["Land Cruiser"] = new() { "GX", "VX", "GR Sport" },
-                    ["Prius"] = new() { "LE", "XLE", "Limited", "Prime LE", "Prime XLE" },
+                    ["Land Cruiser Prado"] = new() { "TX", "TXL", "VX", "GR Sport" },
                     ["RAV4"] = new() { "LE", "XLE", "XLE Premium", "Adventure", "Limited", "Hybrid LE", "Hybrid XLE", "Hybrid Limited" },
                     ["Sequoia"] = new() { "SR5", "Limited", "Platinum", "TRD Pro", "Capstone" },
-                    ["Sienna"] = new() { "LE", "XLE", "XSE", "Limited", "Platinum" },
+                    ["Venza"] = new() { "LE", "XLE", "Limited" },
+                    ["Raize"] = new() { "X MT", "X CVT", "G CVT", "Z CVT" },
+                    // ── Pickups ─────────────────────────────────────────────────────────
+                    ["Hilux"] = new() { "DX", "SR", "SRV", "GR-S" },
                     ["Tacoma"] = new() { "SR", "SR5", "TRD Sport", "TRD Off-Road", "Limited", "TRD Pro" },
-                    ["Yaris"] = new() { "S", "R", "S CVT", "GR Sport" },
-                    ["Hiace"] = new(){ "Panel", "Panel Ventanas","Panel Superlarga","Ventanas Superlarga","12 Pasajeros"},
-                    ["Tundra"] = new(){"Limited","Platinum", "TRD Off Road HEV","TRD Pro HEV"},
+                    ["Tundra"] = new() { "Limited", "Platinum", "TRD Off Road HEV", "TRD Pro HEV" },
+
+                    // ── Minivans / Vans ─────────────────────────────────────────────────
+                    ["Hiace"] = new() { "Panel", "Panel Ventanas", "Panel Superlarga", "Ventanas Superlarga", "12 Pasajeros" },
+                    ["Sienna"] = new() { "LE", "XLE", "XSE", "Limited", "Platinum" },
                 },
                 // ─────────────────────────────────────────────────────────────────
                 ["Lexus"] = new(StringComparer.OrdinalIgnoreCase)
@@ -178,23 +225,61 @@ namespace CarslineApp.Services
                 // ─────────────────────────────────────────────────────────────────
                 ["Volkswagen"] = new(StringComparer.OrdinalIgnoreCase)
                 {
-                    ["Bora"] = new() { "Trendline", "Comfortline", "Highline", "GLI" },
+                    // ── Hatchbacks / Compactos ───────────────────────────────────────────
                     ["Beetle"] = new() { "Design", "Sport", "R-Line", "Final Edition" },
                     ["Crossfox"] = new() { "Trendline", "Comfortline" },
+                    ["Fox"] = new() { "Trendline", "Comfortline" },
                     ["Gol"] = new() { "Trendline", "Comfortline" },
                     ["Golf"] = new() { "Trendline", "Comfortline", "Highline", "GTI", "R" },
+                    ["Golf GTI"] = new() { "Base", "Autobahn" },
+                    ["Golf R"] = new() { "Base" },
+                    ["Lupo"] = new() { "Trendline", "Comfortline" },
+                    ["Polo"] = new() { "Trendline", "Comfortline", "Highline" },
+                    ["Up!"] = new() { "Take Up!", "Move Up!", "High Up!" },
+
+                    // ── Sedanes ─────────────────────────────────────────────────────────
+                    ["Bora"] = new() { "Trendline", "Comfortline", "Highline", "GLI" },
                     ["Jetta"] = new() { "Trendline", "Comfortline", "Highline", "GLI", "SEL" },
                     ["Passat"] = new() { "Trendline", "Comfortline", "Highline" },
-                    ["Polo"] = new() { "Trendline", "Comfortline", "Highline" },
-                    ["Saveiro"] = new() { "Trendline", "Comfortline", "Cross" },
+                    ["Phaeton"] = new() { "V6", "W12" },
+                    ["Vento"] = new() { "Trendline", "Comfortline", "Highline", "GLI" },
+                    ["Virtus"] = new() { "Trendline", "Comfortline", "Highline" },
+
+                    // ── CUVs / SUVs ─────────────────────────────────────────────────────
                     ["Taigun"] = new() { "Trendline", "Comfortline", "Highline" },
                     ["Taos"] = new() { "Trendline", "Comfortline", "Highline" },
                     ["T-Cross"] = new() { "Trendline", "Comfortline", "Highline" },
+                    ["T-Roc"] = new() { "Trendline", "Comfortline", "Highline", "R-Line" },
                     ["Tiguan"] = new() { "Trendline", "Comfortline", "Highline", "R-Line" },
+                    ["Tiguan Allspace"] = new() { "Trendline", "Comfortline", "Highline" },
                     ["Teramont"] = new() { "Trendline", "Comfortline", "Highline" },
                     ["Touareg"] = new() { "Premium", "R-Line", "Elegance" },
-                    ["Vento"] = new() { "Trendline", "Comfortline", "Highline", "GLI" },
-                    ["Virtus"] = new() { "Trendline", "Comfortline", "Highline" }
+
+                    // ── Pickups ─────────────────────────────────────────────────────────
+                    ["Amarok"] = new() { "Trendline", "Comfortline", "Highline", "Aventura", "V6 Highline", "V6 Aventura" },
+                    ["Saveiro"] = new() { "Trendline", "Comfortline", "Cross" },
+
+                    // ── Minivans / Vans ─────────────────────────────────────────────────
+                    ["Caravelle"] = new() { "Trendline", "Comfortline", "Highline" },
+                    ["Multivan"] = new() { "Trendline", "Comfortline", "Highline" },
+                    ["Routan"] = new() { "SE", "SEL" },
+                    ["Sharan"] = new() { "Trendline", "Comfortline", "Highline" },
+                    ["Touran"] = new() { "Trendline", "Comfortline", "Highline" },
+                    ["Transporter"] = new() { "Panel", "Mixto", "9 Pasajeros" },
+
+                    // ── Eléctricos ──────────────────────────────────────────────────────
+                    ["ID.3"] = new() { "Pure", "Life", "Style", "Max" },
+                    ["ID.4"] = new() { "Pure", "Life", "Style", "GTX" },
+                    ["ID.5"] = new() { "Style", "GTX" },
+                    ["ID.6"] = new() { "Pure", "Life", "Style" },
+                    ["ID.7"] = new() { "Pro", "Pro S" },
+                    ["ID. Buzz"] = new() { "Pro", "GTX" },
+
+                    // ── Deportivos ──────────────────────────────────────────────────────
+                    ["Arteon"] = new() { "Elegance", "R-Line", "R" },
+                    ["CC"] = new() { "Trendline", "Comfortline", "Highline" },
+                    ["Corrado"] = new() { "VR6", "G60" },
+                    ["Scirocco"] = new() { "Trendline", "Comfortline", "R-Line", "R" },
                 },
                 // ─────────────────────────────────────────────────────────────────
                 ["Honda"] = new(StringComparer.OrdinalIgnoreCase)
@@ -234,7 +319,7 @@ namespace CarslineApp.Services
                     ["Carnival"] = new() { "LX", "EX", "SX", "SX Prestige" },
                     ["EV6"] = new() { "Wind", "GT-Line", "GT-Line AWD" },
                     ["K3"] = new() { "EX", "EX Premium", "GT Line" },
-                    ["K4"] = new() { "L MT", "L IVT", "LX MT", "LX IVT","EX IVT","GT Line","GT Line Turbo"},
+                    ["K4"] = new() { "L MT", "L IVT", "LX MT", "LX IVT", "EX IVT", "GT Line", "GT Line Turbo" },
                     ["K5"] = new() { "LX", "EX", "GT-Line", "EX Premium" },
                     ["Niro"] = new() { "LX Hybrid", "EX Hybrid", "EX Premium Hybrid", "EV LX", "EV EX" },
                     ["Rio"] = new() { "LX", "EX", "GT Line" },
@@ -295,7 +380,6 @@ namespace CarslineApp.Services
                 // ─────────────────────────────────────────────────────────────────
                 ["RAM"] = new(StringComparer.OrdinalIgnoreCase)
                 {
-
                     ["700"] = new() { "SLT Cabina Regular", "SLT Cabina Doble", "Big Horn", "Big Horn CVT", "Laramie", "Laramie CVT Turbo" },
                     ["1200"] = new() { "Tradesman Regular Cab", "Tradesman Doble Cab", "Big Horn", "Laramie" },
                     ["1500"] = new() { "Tradesman", "Express", "Big Horn", "Rebel", "Laramie", "Longhorn", "Limited", "TRX", "RHO" },
@@ -303,7 +387,6 @@ namespace CarslineApp.Services
                     ["ProMaster"] = new() { "1500 Cargo Van", "2500 Cargo Van", "3500 Cargo Van", "2500 Window Van", "3500 Window Van", "City Cargo Van", "City Wagon" },
                     ["3500"] = new() { "Tradesman", "Big Horn", "Laramie", "Power Wagon", "Limited Longhorn", "Limited" },
                 },
-
                 // ─────────────────────────────────────────────────────────────────
                 ["Audi"] = new(StringComparer.OrdinalIgnoreCase)
                 {
@@ -518,7 +601,6 @@ namespace CarslineApp.Services
                     ["RX5"] = new() { "Style", "Elegance" },
                     ["Marvel R"] = new() { "Luxury", "Performance" },
                 },
-
                 // ─────────────────────────────────────────────────────────────────
                 ["BYD"] = new(StringComparer.OrdinalIgnoreCase)
                 {
@@ -530,7 +612,6 @@ namespace CarslineApp.Services
                     ["Tang"] = new() { "EV AWD" },
                     ["Han"] = new() { "EV", "EV AWD" },
                 },
-
                 // ─────────────────────────────────────────────────────────────────
                 ["Chirey"] = new(StringComparer.OrdinalIgnoreCase)
                 {
@@ -539,14 +620,12 @@ namespace CarslineApp.Services
                     ["Tiggo 7 Pro"] = new() { "Luxury", "Premium" },
                     ["Tiggo 8 Pro"] = new() { "Luxury", "Premium", "e+" },
                 },
-
                 // ─────────────────────────────────────────────────────────────────
                 ["Omoda"] = new(StringComparer.OrdinalIgnoreCase)
                 {
                     ["O5"] = new() { "Life", "Unlimited" },
                     ["C5"] = new() { "Life", "Unlimited" },
                 },
-
                 // ─────────────────────────────────────────────────────────────────
                 ["JAC"] = new(StringComparer.OrdinalIgnoreCase)
                 {
@@ -561,7 +640,6 @@ namespace CarslineApp.Services
                     ["Frison T6"] = new() { "Flex", "Diesel" },
                     ["Frison T8"] = new() { "Diesel 4x4" },
                 },
-
                 // ─────────────────────────────────────────────────────────────────
                 ["GWM"] = new(StringComparer.OrdinalIgnoreCase)
                 {
@@ -570,7 +648,6 @@ namespace CarslineApp.Services
                     ["Tank 300"] = new() { "Luxury", "Premium" },
                     ["Ora 03"] = new() { "400 km", "500 km" },
                 },
-
                 // ─────────────────────────────────────────────────────────────────
                 ["BAIC"] = new(StringComparer.OrdinalIgnoreCase)
                 {
@@ -579,7 +656,6 @@ namespace CarslineApp.Services
                     ["BJ40"] = new() { "Champion", "Plus" },
                     ["EU5"] = new() { "EV" },
                 },
-
                 // ─────────────────────────────────────────────────────────────────
                 ["Changan"] = new(StringComparer.OrdinalIgnoreCase)
                 {
@@ -590,7 +666,6 @@ namespace CarslineApp.Services
                     ["UNI-T"] = new() { "Elite", "Limited" },
                     ["UNI-K"] = new() { "Elite", "Limited" },
                 },
-
                 // ─────────────────────────────────────────────────────────────────
                 ["Jetour"] = new(StringComparer.OrdinalIgnoreCase)
                 {
@@ -651,9 +726,702 @@ namespace CarslineApp.Services
                     ["D-Max"] = new() { "Workhorse", "Space Cab", "Worker", "V-Cross", "Highlander", "X-Terrain" },
                     ["MU-X"] = new() { "Comfort", "Premium", "RS", "Ultimate" },
                 },
-
             };
 
+        // ══════════════════════════════════════════════════════════════════════
+        //  CATÁLOGO DE TIPOS  Marca → Modelo → TipoCarroceria
+        // ══════════════════════════════════════════════════════════════════════
+        private static readonly Dictionary<string, Dictionary<string, TipoCarroceria>> _tipos =
+            new(StringComparer.OrdinalIgnoreCase)
+            {
+                // ─── Chevrolet ────────────────────────────────────────────────
+                ["Chevrolet"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Agile"] = TipoCarroceria.HATCHBACK,
+                    ["Aveo"] = TipoCarroceria.SEDAN,
+                    ["Beat"] = TipoCarroceria.HATCHBACK,
+                    ["Cavalier"] = TipoCarroceria.SEDAN,
+                    ["Cobalt"] = TipoCarroceria.SEDAN,
+                    ["Cruze"] = TipoCarroceria.SEDAN,
+                    ["Epica"] = TipoCarroceria.SEDAN,
+                    ["Impala"] = TipoCarroceria.SEDAN,
+                    ["Malibu"] = TipoCarroceria.SEDAN,
+                    ["Monza"] = TipoCarroceria.SEDAN,
+                    ["Onix"] = TipoCarroceria.HATCHBACK,
+                    ["Optra"] = TipoCarroceria.SEDAN,
+                    ["Prisma"] = TipoCarroceria.SEDAN,
+                    ["Sail"] = TipoCarroceria.SEDAN,
+                    ["Sonic"] = TipoCarroceria.HATCHBACK,
+                    ["Spark"] = TipoCarroceria.HATCHBACK,
+                    ["Vectra"] = TipoCarroceria.SEDAN,
+                    ["Blazer"] = TipoCarroceria.SUV,
+                    ["Blazer EV"] = TipoCarroceria.SUV,
+                    ["Captiva"] = TipoCarroceria.SUV,
+                    ["Equinox"] = TipoCarroceria.SUV,
+                    ["Equinox EV"] = TipoCarroceria.SUV,
+                    ["Groove"] = TipoCarroceria.SUV,
+                    ["Orlando"] = TipoCarroceria.MINIVAN,
+                    ["Suburban"] = TipoCarroceria.SUV,
+                    ["Tahoe"] = TipoCarroceria.SUV,
+                    ["Tracker"] = TipoCarroceria.SUV,
+                    ["Trailblazer"] = TipoCarroceria.SUV,
+                    ["Traverse"] = TipoCarroceria.SUV,
+                    ["Trax"] = TipoCarroceria.SUV,
+                    ["Avalanche"] = TipoCarroceria.PICKUP,
+                    ["Colorado"] = TipoCarroceria.PICKUP,
+                    ["LUV"] = TipoCarroceria.PICKUP,
+                    ["Montana"] = TipoCarroceria.PICKUP,
+                    ["S10"] = TipoCarroceria.PICKUP,
+                    ["Silverado"] = TipoCarroceria.PICKUP,
+                    ["Silverado EV"] = TipoCarroceria.PICKUP,
+                    ["Tornado"] = TipoCarroceria.PICKUP,
+                    ["Camaro"] = TipoCarroceria.AUTOSTURBO,
+                    ["Corvette"] = TipoCarroceria.AUTOSTURBO,
+                    ["Bolt EV"] = TipoCarroceria.HATCHBACK,
+                    ["Bolt EUV"] = TipoCarroceria.SUV,
+                    ["HHR"] = TipoCarroceria.HATCHBACK,
+                    ["SSR"] = TipoCarroceria.AUTOSTURBO,
+                    ["Uplander"] = TipoCarroceria.MINIVAN,
+                    ["Venture"] = TipoCarroceria.MINIVAN,
+                },
+                // ─── Ford ─────────────────────────────────────────────────────
+                ["Ford"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Fiesta"] = TipoCarroceria.HATCHBACK,
+                    ["Focus"] = TipoCarroceria.HATCHBACK,
+                    ["Fusion"] = TipoCarroceria.SEDAN,
+                    ["Taurus"] = TipoCarroceria.SEDAN,
+                    ["Mondeo"] = TipoCarroceria.SEDAN,
+                    ["Ka"] = TipoCarroceria.HATCHBACK,
+                    ["Ikon"] = TipoCarroceria.SEDAN,
+                    ["Crown Victoria"] = TipoCarroceria.SEDAN,
+                    ["Bronco"] = TipoCarroceria.SUV,
+                    ["Bronco Sport"] = TipoCarroceria.SUV,
+                    ["EcoSport"] = TipoCarroceria.SUV,
+                    ["Edge"] = TipoCarroceria.SUV,
+                    ["Escape"] = TipoCarroceria.SUV,
+                    ["Everest"] = TipoCarroceria.SUV,
+                    ["Explorer"] = TipoCarroceria.SUV,
+                    ["Expedition"] = TipoCarroceria.SUV,
+                    ["Kuga"] = TipoCarroceria.SUV,
+                    ["Puma"] = TipoCarroceria.SUV,
+                    ["Territory"] = TipoCarroceria.SUV,
+                    ["Maverick"] = TipoCarroceria.PICKUP,
+                    ["Ranger"] = TipoCarroceria.PICKUP,
+                    ["F-150"] = TipoCarroceria.PICKUP,
+                    ["F-150 Lightning"] = TipoCarroceria.PICKUP,
+                    ["F-250"] = TipoCarroceria.PICKUP,
+                    ["F-350"] = TipoCarroceria.PICKUP,
+                    ["F-450"] = TipoCarroceria.PICKUP,
+                    ["Courier"] = TipoCarroceria.PICKUP,
+                    ["Mustang"] = TipoCarroceria.AUTOSTURBO,
+                    ["Mustang Mach-E"] = TipoCarroceria.SUV,
+                    ["Ford GT"] = TipoCarroceria.AUTOSTURBO,
+                    ["Transit"] = TipoCarroceria.MINIVAN,
+                    ["Transit Connect"] = TipoCarroceria.MINIVAN,
+                    ["Tourneo"] = TipoCarroceria.MINIVAN,
+                },
+                // ─── Nissan ───────────────────────────────────────────────────
+                ["Nissan"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    // Sedanes
+                    ["Altima"] = TipoCarroceria.SEDAN,
+                    ["Sentra"] = TipoCarroceria.SEDAN,
+                    ["Versa"] = TipoCarroceria.SEDAN,
+                    ["Tiida"] = TipoCarroceria.SEDAN,
+                    ["Maxima"] = TipoCarroceria.SEDAN,
+                    ["Sylphy"] = TipoCarroceria.SEDAN,
+                    ["Almera"] = TipoCarroceria.SEDAN,
+                    ["Sunny"] = TipoCarroceria.SEDAN,
+                    // Hatchbacks
+                    ["March"] = TipoCarroceria.HATCHBACK,
+                    ["Versa Note"] = TipoCarroceria.HATCHBACK,
+                    ["Micra"] = TipoCarroceria.HATCHBACK,
+                    ["Note"] = TipoCarroceria.HATCHBACK,
+                    ["Leaf"] = TipoCarroceria.HATCHBACK,
+                    // SUVs
+                    ["Juke"] = TipoCarroceria.SUV,
+                    ["Kicks"] = TipoCarroceria.SUV,
+                    ["Kicks Play"] = TipoCarroceria.SUV,
+                    ["Qashqai"] = TipoCarroceria.SUV,
+                    ["Rogue"] = TipoCarroceria.SUV,
+                    ["Rogue Sport"] = TipoCarroceria.SUV,
+                    ["X-Trail"] = TipoCarroceria.SUV,
+                    ["Murano"] = TipoCarroceria.SUV,
+                    ["Pathfinder"] = TipoCarroceria.SUV,
+                    ["Armada"] = TipoCarroceria.SUV,
+                    ["Terrano"] = TipoCarroceria.SUV,
+                    ["Ariya"] = TipoCarroceria.SUV,
+                    ["Ariya e-4ORCE"] = TipoCarroceria.SUV,
+                    ["Patrol"] = TipoCarroceria.SUV,
+                    ["Xterra"] = TipoCarroceria.SUV,
+                    // Pickups
+                    ["Frontier"] = TipoCarroceria.PICKUP,
+                    ["NP300"] = TipoCarroceria.PICKUP,
+                    ["Navara"] = TipoCarroceria.PICKUP,
+                    ["Titan"] = TipoCarroceria.PICKUP,
+                    // Deportivos
+                    ["370Z"] = TipoCarroceria.AUTOSTURBO,
+                    ["400Z"] = TipoCarroceria.AUTOSTURBO,
+                    ["GT-R"] = TipoCarroceria.AUTOSTURBO,
+                    // Minivans
+                    ["Urvan"] = TipoCarroceria.MINIVAN,
+                    ["NV200"] = TipoCarroceria.MINIVAN,
+                    ["NV350"] = TipoCarroceria.MINIVAN,
+                },
+                // ─── Toyota ───────────────────────────────────────────────────
+                ["Toyota"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    // Sedanes
+                    ["Camry"] = TipoCarroceria.SEDAN,
+                    ["Corolla"] = TipoCarroceria.SEDAN,
+                    ["Corolla Cross"] = TipoCarroceria.SUV,
+                    ["Prius"] = TipoCarroceria.SEDAN,
+                    ["Prius C"] = TipoCarroceria.HATCHBACK,
+                    ["Yaris Sedan"] = TipoCarroceria.SEDAN,
+                    // Hatchbacks
+                    ["Yaris Hatchback"] = TipoCarroceria.HATCHBACK,
+                    ["Yaris GR"] = TipoCarroceria.HATCHBACK,
+                    ["GR86"] = TipoCarroceria.AUTOSTURBO,
+                    // CUVs
+                    ["4Runner"] = TipoCarroceria.SUV,
+                    ["bZ4X"] = TipoCarroceria.SUV,
+                    ["C-HR"] = TipoCarroceria.SUV,
+                    ["Crown"] = TipoCarroceria.SUV,
+                    ["Fortuner"] = TipoCarroceria.SUV,
+                    ["Land Cruiser"] = TipoCarroceria.SUV,
+                    ["Land Cruiser Prado"] = TipoCarroceria.SUV,
+                    ["RAV4"] = TipoCarroceria.SUV,
+                    ["Sequoia"] = TipoCarroceria.SUV,
+                    ["Venza"] = TipoCarroceria.SUV,
+                    ["Raize"] = TipoCarroceria.SUV,
+                    // Pickups
+                    ["Hilux"] = TipoCarroceria.PICKUP,
+                    ["Tacoma"] = TipoCarroceria.PICKUP,
+                    ["Tundra"] = TipoCarroceria.PICKUP,
+                    // Minivans
+                    ["Hiace"] = TipoCarroceria.MINIVAN,
+                    ["Sienna"] = TipoCarroceria.MINIVAN,
+                },
+                // ─── Lexus ────────────────────────────────────────────────────
+                ["Lexus"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["UX"] = TipoCarroceria.SUV,
+                    ["IS"] = TipoCarroceria.SEDAN,
+                    ["ES"] = TipoCarroceria.SEDAN,
+                    ["NX"] = TipoCarroceria.SUV,
+                    ["RX"] = TipoCarroceria.SUV,
+                    ["TX"] = TipoCarroceria.SUV,
+                    ["GX"] = TipoCarroceria.SUV,
+                    ["LX"] = TipoCarroceria.SUV,
+                    ["LC"] = TipoCarroceria.AUTOSTURBO,
+                    ["LS"] = TipoCarroceria.SEDAN,
+                    ["RZ"] = TipoCarroceria.SUV,
+                },
+                // ─── Volkswagen ───────────────────────────────────────────────
+                ["Volkswagen"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    // Hatchbacks
+                    ["Beetle"] = TipoCarroceria.HATCHBACK,
+                    ["Crossfox"] = TipoCarroceria.HATCHBACK,
+                    ["Fox"] = TipoCarroceria.HATCHBACK,
+                    ["Gol"] = TipoCarroceria.HATCHBACK,
+                    ["Golf"] = TipoCarroceria.HATCHBACK,
+                    ["Golf GTI"] = TipoCarroceria.HATCHBACK,
+                    ["Golf R"] = TipoCarroceria.HATCHBACK,
+                    ["Lupo"] = TipoCarroceria.HATCHBACK,
+                    ["Polo"] = TipoCarroceria.HATCHBACK,
+                    ["Up!"] = TipoCarroceria.HATCHBACK,
+                    // Sedanes
+                    ["Bora"] = TipoCarroceria.SEDAN,
+                    ["Jetta"] = TipoCarroceria.SEDAN,
+                    ["Passat"] = TipoCarroceria.SEDAN,
+                    ["Phaeton"] = TipoCarroceria.SEDAN,
+                    ["Vento"] = TipoCarroceria.SEDAN,
+                    ["Virtus"] = TipoCarroceria.SEDAN,
+                    // CUVs
+                    ["Taigun"] = TipoCarroceria.SUV,
+                    ["Taos"] = TipoCarroceria.SUV,
+                    ["T-Cross"] = TipoCarroceria.SUV,
+                    ["T-Roc"] = TipoCarroceria.SUV,
+                    ["Tiguan"] = TipoCarroceria.SUV,
+                    ["Tiguan Allspace"] = TipoCarroceria.SUV,
+                    ["Teramont"] = TipoCarroceria.SUV,
+                    ["Touareg"] = TipoCarroceria.SUV,
+                    // Pickups
+                    ["Amarok"] = TipoCarroceria.PICKUP,
+                    ["Saveiro"] = TipoCarroceria.PICKUP,
+                    // Minivans
+                    ["Caravelle"] = TipoCarroceria.MINIVAN,
+                    ["Multivan"] = TipoCarroceria.MINIVAN,
+                    ["Routan"] = TipoCarroceria.MINIVAN,
+                    ["Sharan"] = TipoCarroceria.MINIVAN,
+                    ["Touran"] = TipoCarroceria.MINIVAN,
+                    ["Transporter"] = TipoCarroceria.MINIVAN,
+                    // Eléctricos (CUV/Hatchback)
+                    ["ID.3"] = TipoCarroceria.HATCHBACK,
+                    ["ID.4"] = TipoCarroceria.SUV,
+                    ["ID.5"] = TipoCarroceria.SUV,
+                    ["ID.6"] = TipoCarroceria.SUV,
+                    ["ID.7"] = TipoCarroceria.SEDAN,
+                    ["ID. Buzz"] = TipoCarroceria.MINIVAN,
+                    // Deportivos
+                    ["Arteon"] = TipoCarroceria.AUTOSTURBO,
+                    ["CC"] = TipoCarroceria.AUTOSTURBO,
+                    ["Corrado"] = TipoCarroceria.AUTOSTURBO,
+                    ["Scirocco"] = TipoCarroceria.AUTOSTURBO,
+                },
+                // ─── Honda ────────────────────────────────────────────────────
+                ["Honda"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Accord"] = TipoCarroceria.SEDAN,
+                    ["BR-V"] = TipoCarroceria.SUV,
+                    ["City"] = TipoCarroceria.SEDAN,
+                    ["Civic"] = TipoCarroceria.SEDAN,
+                    ["CR-V"] = TipoCarroceria.SUV,
+                    ["Fit"] = TipoCarroceria.HATCHBACK,
+                    ["HR-V"] = TipoCarroceria.SUV,
+                    ["Insight"] = TipoCarroceria.SEDAN,
+                    ["WR-V"] = TipoCarroceria.SUV,
+                    ["CR-Z"] = TipoCarroceria.HATCHBACK,
+                    ["Crosstour"] = TipoCarroceria.SUV,
+                    ["Element"] = TipoCarroceria.SUV,
+                    ["Odyssey"] = TipoCarroceria.MINIVAN,
+                    ["Pilot"] = TipoCarroceria.SUV,
+                    ["Ridgeline"] = TipoCarroceria.PICKUP,
+                },
+                // ─── Hyundai ──────────────────────────────────────────────────
+                ["Hyundai"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Accent"] = TipoCarroceria.SEDAN,
+                    ["Creta"] = TipoCarroceria.SUV,
+                    ["Elantra"] = TipoCarroceria.SEDAN,
+                    ["Ioniq"] = TipoCarroceria.HATCHBACK,
+                    ["Kona"] = TipoCarroceria.SUV,
+                    ["Santa Fe"] = TipoCarroceria.SUV,
+                    ["Sonata"] = TipoCarroceria.SEDAN,
+                    ["Tucson"] = TipoCarroceria.SUV,
+                    ["Venue"] = TipoCarroceria.SUV,
+                },
+                // ─── Kia ──────────────────────────────────────────────────────
+                ["Kia"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Carnival"] = TipoCarroceria.MINIVAN,
+                    ["EV6"] = TipoCarroceria.SUV,
+                    ["K3"] = TipoCarroceria.SEDAN,
+                    ["K4"] = TipoCarroceria.SEDAN,
+                    ["K5"] = TipoCarroceria.SEDAN,
+                    ["Niro"] = TipoCarroceria.SUV,
+                    ["Rio"] = TipoCarroceria.HATCHBACK,
+                    ["Seltos"] = TipoCarroceria.SUV,
+                    ["Sorento"] = TipoCarroceria.SUV,
+                    ["Soul"] = TipoCarroceria.HATCHBACK,
+                    ["Sportage"] = TipoCarroceria.SUV,
+                    ["Stinger"] = TipoCarroceria.AUTOSTURBO,
+                },
+                // ─── Mazda ────────────────────────────────────────────────────
+                ["Mazda"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["CX-3"] = TipoCarroceria.SUV,
+                    ["CX-30"] = TipoCarroceria.SUV,
+                    ["CX-5"] = TipoCarroceria.SUV,
+                    ["CX-7"] = TipoCarroceria.SUV,
+                    ["CX-9"] = TipoCarroceria.SUV,
+                    ["CX-50"] = TipoCarroceria.SUV,
+                    ["CX-60"] = TipoCarroceria.SUV,
+                    ["CX-70"] = TipoCarroceria.SUV,
+                    ["CX-90"] = TipoCarroceria.SUV,
+                    ["Mazda2"] = TipoCarroceria.HATCHBACK,
+                    ["Mazda3"] = TipoCarroceria.SEDAN,
+                    ["Mazda5"] = TipoCarroceria.MINIVAN,
+                    ["Mazda6"] = TipoCarroceria.SEDAN,
+                    ["MX-5"] = TipoCarroceria.AUTOSTURBO,
+                    ["MX-30"] = TipoCarroceria.SUV,
+                    ["BT-50"] = TipoCarroceria.PICKUP,
+                },
+                // ─── Dodge ────────────────────────────────────────────────────
+                ["Dodge"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Attitude"] = TipoCarroceria.SEDAN,
+                    ["Challenger"] = TipoCarroceria.AUTOSTURBO,
+                    ["Charger"] = TipoCarroceria.AUTOSTURBO,
+                    ["Durango"] = TipoCarroceria.SUV,
+                    ["Journey"] = TipoCarroceria.SUV,
+                    ["Neon"] = TipoCarroceria.SEDAN,
+                    ["Vision"] = TipoCarroceria.SEDAN,
+                    ["Grand Caravan"] = TipoCarroceria.MINIVAN,
+                    ["Dakota"] = TipoCarroceria.PICKUP,
+                    ["Viper"] = TipoCarroceria.AUTOSTURBO,
+                    ["Nitro"] = TipoCarroceria.SUV,
+                    ["Caliber"] = TipoCarroceria.HATCHBACK,
+                    ["Avenger"] = TipoCarroceria.SEDAN,
+                    ["i10"] = TipoCarroceria.HATCHBACK,
+                },
+                // ─── Jeep ─────────────────────────────────────────────────────
+                ["Jeep"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Cherokee"] = TipoCarroceria.SUV,
+                    ["Compass"] = TipoCarroceria.SUV,
+                    ["Gladiator"] = TipoCarroceria.PICKUP,
+                    ["Grand Cherokee"] = TipoCarroceria.SUV,
+                    ["Renegade"] = TipoCarroceria.SUV,
+                    ["Wrangler"] = TipoCarroceria.SUV,
+                },
+                // ─── RAM ──────────────────────────────────────────────────────
+                ["RAM"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["700"] = TipoCarroceria.PICKUP,
+                    ["1200"] = TipoCarroceria.PICKUP,
+                    ["1500"] = TipoCarroceria.PICKUP,
+                    ["2500"] = TipoCarroceria.PICKUP,
+                    ["ProMaster"] = TipoCarroceria.MINIVAN,
+                    ["3500"] = TipoCarroceria.PICKUP,
+                },
+                // ─── Audi ─────────────────────────────────────────────────────
+                ["Audi"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["A1"] = TipoCarroceria.HATCHBACK,
+                    ["A3"] = TipoCarroceria.SEDAN,
+                    ["A4"] = TipoCarroceria.SEDAN,
+                    ["A5"] = TipoCarroceria.AUTOSTURBO,
+                    ["A6"] = TipoCarroceria.SEDAN,
+                    ["Q2"] = TipoCarroceria.SUV,
+                    ["Q3"] = TipoCarroceria.SUV,
+                    ["Q5"] = TipoCarroceria.SUV,
+                    ["Q7"] = TipoCarroceria.SUV,
+                    ["Q8"] = TipoCarroceria.SUV,
+                    ["TT"] = TipoCarroceria.AUTOSTURBO,
+                },
+                // ─── BMW ──────────────────────────────────────────────────────
+                ["BMW"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["116i"] = TipoCarroceria.HATCHBACK,
+                    ["118i"] = TipoCarroceria.HATCHBACK,
+                    ["218i"] = TipoCarroceria.SEDAN,
+                    ["320i"] = TipoCarroceria.SEDAN,
+                    ["330i"] = TipoCarroceria.SEDAN,
+                    ["420i"] = TipoCarroceria.AUTOSTURBO,
+                    ["520i"] = TipoCarroceria.SEDAN,
+                    ["530i"] = TipoCarroceria.SEDAN,
+                    ["X1"] = TipoCarroceria.SUV,
+                    ["X2"] = TipoCarroceria.SUV,
+                    ["X3"] = TipoCarroceria.SUV,
+                    ["X4"] = TipoCarroceria.SUV,
+                    ["X5"] = TipoCarroceria.SUV,
+                    ["X6"] = TipoCarroceria.SUV,
+                },
+                // ─── Mercedes-Benz ────────────────────────────────────────────
+                ["Mercedes-Benz"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["A 200"] = TipoCarroceria.HATCHBACK,
+                    ["B 200"] = TipoCarroceria.HATCHBACK,
+                    ["C 180"] = TipoCarroceria.SEDAN,
+                    ["C 200"] = TipoCarroceria.SEDAN,
+                    ["CLA"] = TipoCarroceria.SEDAN,
+                    ["E 200"] = TipoCarroceria.SEDAN,
+                    ["GLA"] = TipoCarroceria.SUV,
+                    ["GLB"] = TipoCarroceria.SUV,
+                    ["GLC"] = TipoCarroceria.SUV,
+                    ["GLE"] = TipoCarroceria.SUV,
+                    ["GLS"] = TipoCarroceria.SUV,
+                },
+                // ─── Peugeot ──────────────────────────────────────────────────
+                ["Peugeot"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["208"] = TipoCarroceria.HATCHBACK,
+                    ["2008"] = TipoCarroceria.SUV,
+                    ["3008"] = TipoCarroceria.SUV,
+                    ["308"] = TipoCarroceria.HATCHBACK,
+                    ["408"] = TipoCarroceria.SEDAN,
+                    ["5008"] = TipoCarroceria.SUV,
+                },
+                // ─── Renault ──────────────────────────────────────────────────
+                ["Renault"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Captur"] = TipoCarroceria.SUV,
+                    ["Duster"] = TipoCarroceria.SUV,
+                    ["Kangoo"] = TipoCarroceria.MINIVAN,
+                    ["Koleos"] = TipoCarroceria.SUV,
+                    ["Logan"] = TipoCarroceria.SEDAN,
+                    ["Oroch"] = TipoCarroceria.PICKUP,
+                    ["Sandero"] = TipoCarroceria.HATCHBACK,
+                    ["Stepway"] = TipoCarroceria.SUV,
+                },
+                // ─── SEAT ─────────────────────────────────────────────────────
+                ["SEAT"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Arona"] = TipoCarroceria.SUV,
+                    ["Ateca"] = TipoCarroceria.SUV,
+                    ["Ibiza"] = TipoCarroceria.HATCHBACK,
+                    ["Leon"] = TipoCarroceria.HATCHBACK,
+                    ["Leon Sportstourer"] = TipoCarroceria.HATCHBACK,
+                    ["Tarraco"] = TipoCarroceria.SUV,
+                    ["Toledo"] = TipoCarroceria.SEDAN,
+                    ["Altea"] = TipoCarroceria.HATCHBACK,
+                    ["Altea XL"] = TipoCarroceria.HATCHBACK,
+                    ["Exeo"] = TipoCarroceria.SEDAN,
+                    ["Mii"] = TipoCarroceria.HATCHBACK,
+                    ["Cordoba"] = TipoCarroceria.SEDAN,
+                    ["Freetrack"] = TipoCarroceria.SUV,
+                },
+                // ─── CUPRA ────────────────────────────────────────────────────
+                ["CUPRA"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Formentor"] = TipoCarroceria.SUV,
+                    ["Leon"] = TipoCarroceria.HATCHBACK,
+                    ["Ateca"] = TipoCarroceria.SUV,
+                    ["Born"] = TipoCarroceria.HATCHBACK,
+                },
+                // ─── Subaru ───────────────────────────────────────────────────
+                ["Subaru"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["BRZ"] = TipoCarroceria.AUTOSTURBO,
+                    ["Crosstrek"] = TipoCarroceria.SUV,
+                    ["Forester"] = TipoCarroceria.SUV,
+                    ["Impreza"] = TipoCarroceria.HATCHBACK,
+                    ["Legacy"] = TipoCarroceria.SEDAN,
+                    ["Outback"] = TipoCarroceria.SUV,
+                    ["WRX"] = TipoCarroceria.SEDAN,
+                },
+                // ─── Mitsubishi ───────────────────────────────────────────────
+                ["Mitsubishi"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Eclipse Cross"] = TipoCarroceria.SUV,
+                    ["L200"] = TipoCarroceria.PICKUP,
+                    ["Mirage"] = TipoCarroceria.HATCHBACK,
+                    ["Montero"] = TipoCarroceria.SUV,
+                    ["Outlander"] = TipoCarroceria.SUV,
+                },
+                // ─── Fiat ─────────────────────────────────────────────────────
+                ["Fiat"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Argo"] = TipoCarroceria.HATCHBACK,
+                    ["Cronos"] = TipoCarroceria.SEDAN,
+                    ["Mobi"] = TipoCarroceria.HATCHBACK,
+                    ["Pulse"] = TipoCarroceria.SUV,
+                    ["Toro"] = TipoCarroceria.PICKUP,
+                },
+                // ─── Suzuki ───────────────────────────────────────────────────
+                ["Suzuki"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Baleno"] = TipoCarroceria.SEDAN,
+                    ["Ignis"] = TipoCarroceria.HATCHBACK,
+                    ["Jimny"] = TipoCarroceria.SUV,
+                    ["Swift"] = TipoCarroceria.HATCHBACK,
+                    ["Vitara"] = TipoCarroceria.SUV,
+                },
+                // ─── Volvo ────────────────────────────────────────────────────
+                ["Volvo"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["S60"] = TipoCarroceria.SEDAN,
+                    ["S90"] = TipoCarroceria.SEDAN,
+                    ["V60"] = TipoCarroceria.SEDAN,
+                    ["XC40"] = TipoCarroceria.SUV,
+                    ["XC60"] = TipoCarroceria.SUV,
+                    ["XC90"] = TipoCarroceria.SUV,
+                },
+                // ─── GMC ──────────────────────────────────────────────────────
+                ["GMC"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Acadia"] = TipoCarroceria.SUV,
+                    ["Canyon"] = TipoCarroceria.PICKUP,
+                    ["Sierra"] = TipoCarroceria.PICKUP,
+                    ["Terrain"] = TipoCarroceria.SUV,
+                    ["Yukon"] = TipoCarroceria.SUV,
+                },
+                // ─── Buick ────────────────────────────────────────────────────
+                ["Buick"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Enclave"] = TipoCarroceria.SUV,
+                    ["Encore"] = TipoCarroceria.SUV,
+                    ["Envision"] = TipoCarroceria.SUV,
+                },
+                // ─── Chrysler ─────────────────────────────────────────────────
+                ["Chrysler"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["300"] = TipoCarroceria.SEDAN,
+                    ["Pacifica"] = TipoCarroceria.MINIVAN,
+                },
+                // ─── Mini ─────────────────────────────────────────────────────
+                ["Mini"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Clubman"] = TipoCarroceria.HATCHBACK,
+                    ["Cooper"] = TipoCarroceria.HATCHBACK,
+                    ["Countryman"] = TipoCarroceria.SUV,
+                    ["Paceman"] = TipoCarroceria.SUV,
+                },
+                // ─── Porsche ──────────────────────────────────────────────────
+                ["Porsche"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["718"] = TipoCarroceria.AUTOSTURBO,
+                    ["911"] = TipoCarroceria.AUTOSTURBO,
+                    ["Cayenne"] = TipoCarroceria.SUV,
+                    ["Macan"] = TipoCarroceria.SUV,
+                    ["Panamera"] = TipoCarroceria.SEDAN,
+                    ["Taycan"] = TipoCarroceria.SEDAN,
+                },
+                // ─── Land Rover ───────────────────────────────────────────────
+                ["Land Rover"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Defender"] = TipoCarroceria.SUV,
+                    ["Discovery"] = TipoCarroceria.SUV,
+                    ["Discovery Sport"] = TipoCarroceria.SUV,
+                    ["Freelander"] = TipoCarroceria.SUV,
+                    ["Range Rover"] = TipoCarroceria.SUV,
+                    ["Range Rover Evoque"] = TipoCarroceria.SUV,
+                    ["Range Rover Sport"] = TipoCarroceria.SUV,
+                },
+                // ─── Tesla ────────────────────────────────────────────────────
+                ["Tesla"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Model 3"] = TipoCarroceria.SEDAN,
+                    ["Model S"] = TipoCarroceria.SEDAN,
+                    ["Model X"] = TipoCarroceria.SUV,
+                    ["Model Y"] = TipoCarroceria.SUV,
+                },
+                // ─── MG ───────────────────────────────────────────────────────
+                ["MG"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["MG3"] = TipoCarroceria.HATCHBACK,
+                    ["MG5"] = TipoCarroceria.SEDAN,
+                    ["MG GT"] = TipoCarroceria.SEDAN,
+                    ["ZS"] = TipoCarroceria.SUV,
+                    ["ZS EV"] = TipoCarroceria.SUV,
+                    ["HS"] = TipoCarroceria.SUV,
+                    ["RX5"] = TipoCarroceria.SUV,
+                    ["Marvel R"] = TipoCarroceria.SUV,
+                },
+                // ─── BYD ──────────────────────────────────────────────────────
+                ["BYD"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Dolphin"] = TipoCarroceria.HATCHBACK,
+                    ["Dolphin Mini"] = TipoCarroceria.HATCHBACK,
+                    ["Seal"] = TipoCarroceria.SEDAN,
+                    ["Song Plus"] = TipoCarroceria.SUV,
+                    ["Yuan Plus"] = TipoCarroceria.SUV,
+                    ["Tang"] = TipoCarroceria.SUV,
+                    ["Han"] = TipoCarroceria.SEDAN,
+                },
+                // ─── Chirey ───────────────────────────────────────────────────
+                ["Chirey"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Tiggo 2 Pro"] = TipoCarroceria.SUV,
+                    ["Tiggo 4 Pro"] = TipoCarroceria.SUV,
+                    ["Tiggo 7 Pro"] = TipoCarroceria.SUV,
+                    ["Tiggo 8 Pro"] = TipoCarroceria.SUV,
+                },
+                // ─── Omoda ────────────────────────────────────────────────────
+                ["Omoda"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["O5"] = TipoCarroceria.SUV,
+                    ["C5"] = TipoCarroceria.SUV,
+                },
+                // ─── JAC ──────────────────────────────────────────────────────
+                ["JAC"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["J7"] = TipoCarroceria.SEDAN,
+                    ["J4"] = TipoCarroceria.SEDAN,
+                    ["Sei2"] = TipoCarroceria.SUV,
+                    ["Sei3"] = TipoCarroceria.SUV,
+                    ["Sei4 Pro"] = TipoCarroceria.SUV,
+                    ["Sei7 Pro"] = TipoCarroceria.SUV,
+                    ["E10X"] = TipoCarroceria.MINIVAN,
+                    ["E J7"] = TipoCarroceria.SEDAN,
+                    ["Frison T6"] = TipoCarroceria.PICKUP,
+                    ["Frison T8"] = TipoCarroceria.PICKUP,
+                },
+                // ─── GWM ──────────────────────────────────────────────────────
+                ["GWM"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Haval H6"] = TipoCarroceria.SUV,
+                    ["Haval Jolion"] = TipoCarroceria.SUV,
+                    ["Tank 300"] = TipoCarroceria.SUV,
+                    ["Ora 03"] = TipoCarroceria.HATCHBACK,
+                },
+                // ─── BAIC ─────────────────────────────────────────────────────
+                ["BAIC"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["X35"] = TipoCarroceria.SUV,
+                    ["X55"] = TipoCarroceria.SUV,
+                    ["BJ40"] = TipoCarroceria.SUV,
+                    ["EU5"] = TipoCarroceria.SEDAN,
+                },
+                // ─── Changan ──────────────────────────────────────────────────
+                ["Changan"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Alsvin"] = TipoCarroceria.SEDAN,
+                    ["CS35 Plus"] = TipoCarroceria.SUV,
+                    ["CS55 Plus"] = TipoCarroceria.SUV,
+                    ["CS75 Pro"] = TipoCarroceria.SUV,
+                    ["UNI-T"] = TipoCarroceria.SUV,
+                    ["UNI-K"] = TipoCarroceria.SUV,
+                },
+                // ─── Jetour ───────────────────────────────────────────────────
+                ["Jetour"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["X70"] = TipoCarroceria.SUV,
+                    ["X70 Plus"] = TipoCarroceria.SUV,
+                    ["Dashing"] = TipoCarroceria.SUV,
+                    ["T2"] = TipoCarroceria.SUV,
+                },
+                // ─── Lincoln ──────────────────────────────────────────────────
+                ["Lincoln"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Corsair"] = TipoCarroceria.SUV,
+                    ["Nautilus"] = TipoCarroceria.SUV,
+                    ["Aviator"] = TipoCarroceria.SUV,
+                    ["Navigator"] = TipoCarroceria.SUV,
+                },
+                // ─── Smart ────────────────────────────────────────────────────
+                ["Smart"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Fortwo"] = TipoCarroceria.HATCHBACK,
+                    ["Forfour"] = TipoCarroceria.HATCHBACK,
+                    ["#1"] = TipoCarroceria.SUV,
+                    ["#6"] = TipoCarroceria.SUV,
+                },
+                // ─── Geely ────────────────────────────────────────────────────
+                ["Geely"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Coolray"] = TipoCarroceria.SUV,
+                    ["Emgrand"] = TipoCarroceria.SEDAN,
+                    ["Cityray"] = TipoCarroceria.SUV,
+                    ["Starray"] = TipoCarroceria.SUV,
+                    ["EX2"] = TipoCarroceria.HATCHBACK,
+                    ["EX5"] = TipoCarroceria.SUV,
+                    ["Monjaro"] = TipoCarroceria.SUV,
+                    ["Okavango"] = TipoCarroceria.SUV,
+                    ["GX3 Pro"] = TipoCarroceria.SUV,
+                },
+                // ─── Acura ────────────────────────────────────────────────────
+                ["Acura"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["ILX"] = TipoCarroceria.SEDAN,
+                    ["TLX"] = TipoCarroceria.SEDAN,
+                    ["RDX"] = TipoCarroceria.SUV,
+                    ["MDX"] = TipoCarroceria.SUV,
+                    ["ZDX"] = TipoCarroceria.SUV,
+                },
+                // ─── Infiniti ─────────────────────────────────────────────────
+                ["Infiniti"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["QX50"] = TipoCarroceria.SUV,
+                    ["QX55"] = TipoCarroceria.SUV,
+                    ["QX60"] = TipoCarroceria.SUV,
+                    ["QX80"] = TipoCarroceria.SUV,
+                },
+                // ─── Isuzu ────────────────────────────────────────────────────
+                ["Isuzu"] = new(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["D-Max"] = TipoCarroceria.PICKUP,
+                    ["MU-X"] = TipoCarroceria.SUV,
+                },
+            };
+
+
+        // ══════════════════════════════════════════════════════════════════════
+        //  MÉTODOS PÚBLICOS
+        // ══════════════════════════════════════════════════════════════════════
 
         /// <summary>Lista de todas las marcas ordenada alfabéticamente.</summary>
         public static List<string> ObtenerMarcas() =>
@@ -668,12 +1436,33 @@ namespace CarslineApp.Services
                 : new();
         }
 
+        /// <summary>Lista de modelos filtrados por tipo de carrocería para una marca dada.</summary>
+        public static List<string> ObtenerModelosPorTipo(string marca, TipoCarroceria tipo)
+        {
+            if (string.IsNullOrWhiteSpace(marca)) return new();
+            if (!_catalogo.TryGetValue(marca, out var modelos)) return new();
+            if (!_tipos.TryGetValue(marca, out var tiposModelos)) return new();
+
+            return modelos.Keys
+                .Where(m => tiposModelos.TryGetValue(m, out var t) && t == tipo)
+                .OrderBy(m => m)
+                .ToList();
+        }
+
         /// <summary>Lista de versiones para una marca + modelo. Vacía si no existe.</summary>
         public static List<string> ObtenerVersiones(string marca, string modelo)
         {
             if (string.IsNullOrWhiteSpace(marca) || string.IsNullOrWhiteSpace(modelo)) return new();
             if (!_catalogo.TryGetValue(marca, out var modelos)) return new();
             return modelos.TryGetValue(modelo, out var versiones) ? versiones : new();
+        }
+
+        /// <summary>Devuelve el tipo de carrocería de un modelo. Null si no está clasificado.</summary>
+        public static TipoCarroceria? ObtenerTipo(string marca, string modelo)
+        {
+            if (string.IsNullOrWhiteSpace(marca) || string.IsNullOrWhiteSpace(modelo)) return null;
+            if (!_tipos.TryGetValue(marca, out var tiposModelos)) return null;
+            return tiposModelos.TryGetValue(modelo, out var tipo) ? tipo : null;
         }
 
         /// <summary>True si la marca existe en el catálogo.</summary>

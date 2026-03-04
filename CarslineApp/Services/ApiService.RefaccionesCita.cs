@@ -193,6 +193,7 @@ namespace CarslineApp.Services
                 };
             }
         }
+
         /// <summary>
         /// Obtener todas las refacciones de una cita completa agrupadas por trabajo
         /// GET api/RefaccionesCita/cita/{citaId}

@@ -43,6 +43,8 @@ namespace CarslineApp.ViewModels.ViewModelBuscador
             AbrirModalTrabajosCommand = new Command(async () => await AbrirModalTrabajos());
             CerrarModalTrabajosCommand = new Command(() => CerrarModalTrabajos());
             ConfirmarAgregarTrabajosCommand = new Command(async () => await ConfirmarAgregarTrabajos());
+            CompartirPdfCommand = new Command(async () => await CompartirPdf(), () => TieneOrden);
+            EnviarWhatsAppCommand = new Command(async () => await EnviarWhatsApp(), () => TieneOrden);
             EliminarTrabajoCommand = new Command<int>(async (id) => await EliminarTrabajo(id)); // NUEVO
 
             _ = CargarDatosOrden();
@@ -69,7 +71,8 @@ namespace CarslineApp.ViewModels.ViewModelBuscador
                 OnPropertyChanged(nameof(ColorEstado));
                 OnPropertyChanged(nameof(IconoEstado));
                 OnPropertyChanged(nameof(MostrarBotonAgregarTrabajos));
-
+                ((Command)CompartirPdfCommand).ChangeCanExecute();
+                ((Command)EnviarWhatsAppCommand).ChangeCanExecute();
                 // Actualizar comando
                 try
                 {
@@ -174,8 +177,9 @@ namespace CarslineApp.ViewModels.ViewModelBuscador
         public ICommand AbrirModalTrabajosCommand { get; }
         public ICommand CerrarModalTrabajosCommand { get; }
         public ICommand ConfirmarAgregarTrabajosCommand { get; }
-        public ICommand EliminarTrabajoCommand { get; } // NUEVO
-
+        public ICommand EliminarTrabajoCommand { get; }
+        public ICommand CompartirPdfCommand { get; }
+        public ICommand EnviarWhatsAppCommand { get; }
         #endregion
 
         #region Métodos - Eliminar Trabajo
@@ -429,6 +433,155 @@ namespace CarslineApp.ViewModels.ViewModelBuscador
 
         #endregion
 
+        #region Metodos - PDF
+
+        private async Task<string> ObtenerRutaPdfLocal()
+        {
+            try
+            {
+                var result = await _apiService.DescargarPdfOrdenAsync(_ordenId);
+
+                if (!result.Success || result.PdfBytes == null || result.PdfBytes.Length == 0)
+                {
+                    await MostrarAlerta("❌ Error", result.Message ?? "El servidor no devolvió datos para el PDF.");
+                    return null;
+                }
+
+                string carpeta = FileSystem.CacheDirectory;
+                string nombreArchivo = result.NombreArchivo ?? $"Orden_{_ordenId}_{DateTime.Now:yyyyMMdd}.pdf";
+                string rutaCompleta = Path.Combine(carpeta, nombreArchivo);
+
+                await File.WriteAllBytesAsync(rutaCompleta, result.PdfBytes);
+                return rutaCompleta;
+            }
+            catch (Exception ex)
+            {
+                await MostrarAlerta("❌ Error", $"No se pudo generar el PDF:\n{ex.Message}");
+                return null;
+            }
+        }
+
+
+        // ═══════════════════════════════════════════════════════════════
+        //  COMPARTIR PDF → hoja nativa del SO
+        // ═══════════════════════════════════════════════════════════════
+        private async Task CompartirPdf()
+        {
+            IsLoading = true;
+            try
+            {
+                var rutaCache = await ObtenerRutaPdfLocal();
+                if (rutaCache == null) return;
+
+                await Share.Default.RequestAsync(new ShareFileRequest
+                {
+                    Title = $"Reporte Orden {Orden?.NumeroOrden}",
+                    File = new ShareFile(rutaCache, "application/pdf")
+                });
+            }
+            catch (Exception ex)
+            {
+                await MostrarAlerta("❌ Error", $"No se pudo compartir el archivo:\n{ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private async Task EnviarWhatsApp()
+        {
+            try
+            {
+                // ── 1. Resolver número de teléfono ──────────────────────────────
+                string telefono = new string(
+                    (Orden?.ClienteTelefono ?? string.Empty)
+                    .Where(char.IsDigit).ToArray());
+
+                bool usarNumeroCliente = false;
+
+                if (!string.IsNullOrWhiteSpace(telefono))
+                {
+                    usarNumeroCliente = await Application.Current!.MainPage!.DisplayAlert(
+                        "📱 Enviar por WhatsApp",
+                        $"El cliente tiene registrado:\n📞 {Orden?.ClienteTelefono}\n\n¿Deseas usar ese número?",
+                        "Sí, usar ese número",
+                        "No, ingresar otro");
+                }
+
+                if (!usarNumeroCliente)
+                {
+                    string? ingresado = await Application.Current!.MainPage!.DisplayPromptAsync(
+                        "📱 Número de WhatsApp",
+                        "Ingresa el número (10 dígitos, sin espacios ni guiones).\nEjemplo: 8112345678",
+                        placeholder: "8112345678",
+                        keyboard: Keyboard.Telephone,
+                        maxLength: 10);
+
+                    if (string.IsNullOrWhiteSpace(ingresado)) return; // usuario canceló
+
+                    telefono = new string(ingresado.Where(char.IsDigit).ToArray());
+                }
+
+                // ── 2. Validar número ───────────────────────────────────────────
+                if (telefono.Length < 10)
+                {
+                    await MostrarAlerta("⚠️ Número inválido",
+                        "El número debe tener al menos 10 dígitos.\nEjemplo: 8112345678");
+                    return;
+                }
+
+                // Agregar lada de México (+52) si no la tiene
+                if (telefono.Length == 10)
+                    telefono = "52" + telefono;
+
+                // ── 3. Construir mensaje ────────────────────────────────────────
+                string mensaje =
+                    $"🔧 *REPORTE DE SERVICIO*\n\n" +
+                    $"Estimado/a *{Orden?.ClienteNombre}*, le compartimos el reporte de su vehículo.\n\n" +
+                    $"🚗 *{Orden?.VehiculoCompleto}*\n" +
+                    $"📋 Orden: *{Orden?.NumeroOrden}*\n" +
+                    $"📅 Fecha: {DateTime.Now:dd/MM/yyyy}\n\n" +
+                    $"Gracias por su preferencia. ✅";
+
+                string mensajeCodificado = Uri.EscapeDataString(mensaje);
+
+                // ── 4. Abrir WhatsApp ───────────────────────────────────────────
+                bool abierto = false;
+                try
+                {
+                    var uriNativo = new Uri($"whatsapp://send?phone={telefono}&text={mensajeCodificado}");
+                    if (await Launcher.Default.CanOpenAsync(uriNativo))
+                    {
+                        await Launcher.Default.OpenAsync(uriNativo);
+                        abierto = true;
+                    }
+                }
+                catch { /* fallback a web */ }
+
+                if (!abierto)
+                {
+                    var uriWeb = new Uri($"https://wa.me/{telefono}?text={mensajeCodificado}");
+                    await Browser.Default.OpenAsync(uriWeb, BrowserLaunchMode.SystemPreferred);
+                }
+
+                // ── 5. Ofrecer compartir el PDF también ─────────────────────────
+                bool adjuntar = await Application.Current!.MainPage!.DisplayAlert(
+                    "📎 ¿Adjuntar PDF?",
+                    "WhatsApp fue abierto con el mensaje.\n\n" +
+                    "¿Deseas compartir también el archivo PDF ahora?",
+                    "Sí, compartir PDF",
+                    "No, solo el mensaje");
+
+                if (adjuntar)
+                    await CompartirPdf();
+            }
+            catch (Exception ex)
+            {
+                await MostrarAlerta("❌ Error", $"No se pudo abrir WhatsApp:\n{ex.Message}");
+            }
+        }
+        #endregion 
         #region Métodos Originales
 
         private async Task OnVerReporte()

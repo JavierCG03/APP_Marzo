@@ -96,6 +96,12 @@ namespace CarslineApp.Models
                 r.Cantidad > 0 &&
                 r.PrecioUnitario > 0);
     }
+    public class TransferirRefaccionRequest
+    {
+        public int RefaccionCompradaId { get; set; }
+        public decimal PrecioVenta { get; set; }
+    }
+
 
     /// <summary>
     /// Respuesta al agregar refacciones

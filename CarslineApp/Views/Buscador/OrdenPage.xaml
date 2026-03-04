@@ -455,6 +455,31 @@
                                 BackgroundColor="#800020"
                                 TextColor="White"
                                 IsEnabled="{Binding TieneOrden}"/>
+                            <!-- Botones de PDF -->
+                            <HorizontalStackLayout 
+                                Spacing="8" 
+                                HorizontalOptions="Center"
+                                Margin="0,8,0,0">
+
+                                <!-- Compartir PDF -->
+                                <Button Text="📤 Compartir"
+                                        Command="{Binding CompartirPdfCommand}"
+                                        BackgroundColor="#1976D2"
+                                        TextColor="White"
+                                        CornerRadius="8"
+                                        FontSize="13"
+                                        Padding="12,8"/>
+
+                                <!-- Enviar por WhatsApp -->
+                                <Button Text="💬 WhatsApp"
+                                        Command="{Binding EnviarWhatsAppCommand}"
+                                        BackgroundColor="#25D366"
+                                        TextColor="White"
+                                        CornerRadius="8"
+                                        FontSize="13"
+                                        Padding="12,8"/>
+
+                            </HorizontalStackLayout>
 
                         </VerticalStackLayout>
                     </Frame>

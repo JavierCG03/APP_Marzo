@@ -25,7 +25,7 @@ public partial class OrdenPage : ContentPage
     }
     private void OnGenerarPdfDebugClicked(object sender, EventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine("??? BOTÓN FÍSICO PRESIONADO!");
+        System.Diagnostics.Debug.WriteLine(" BOTÓN FÍSICO PRESIONADO!");
         System.Diagnostics.Debug.WriteLine($"   - BindingContext: {BindingContext?.GetType().Name ?? "NULL"}");
 
         var vm = BindingContext as OrdenDetalleViewModel;

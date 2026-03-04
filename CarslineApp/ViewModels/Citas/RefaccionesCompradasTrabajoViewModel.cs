@@ -51,7 +51,7 @@ namespace CarslineApp.ViewModels.Citas
             ToggleInfoCommand = new Command(() => InfoTrabajoVisible = !InfoTrabajoVisible);
             TogglePredeterminadasCommand = new Command(() => PredeterminadasExpandido = !PredeterminadasExpandido);
             AgregarPredeterminadaCommand = new Command<RefaccionPredeterminadaViewModel>(async (r) => await AgregarRefaccionPredeterminada(r));
-            MarcarRefaccionesListasCommand = new Command(async () => await MarcarRefaccionesListas(),() => !EstaCargando && Refacciones.Any());
+            MarcarRefaccionesListasCommand = new Command(async () => await MarcarRefaccionesListas(),() => !EstaCargando );
             BackCommand = new Command(async () => await RegresarAtras());
         }
 
@@ -250,7 +250,7 @@ namespace CarslineApp.ViewModels.Citas
                     new() { Nombre = "Aceite de motor",           Cantidad = null },
                     new() { Nombre = "Filtro de aceite",          Cantidad = 1 },
                     new() { Nombre = "Filtro de Aire de Motor",   Cantidad = 1 },
-                    new() { Nombre = "Filtro de Aire de Polen",   Cantidad = 1 },
+                    new() { Nombre = "Filtro de Aire Polen",   Cantidad = 1 },
                 };
 
             if (nombre.Contains("balatas delanteras"))

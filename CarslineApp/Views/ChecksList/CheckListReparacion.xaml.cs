@@ -144,16 +144,13 @@ public partial class CheckListReparacion : ContentPage
 
         if (!string.IsNullOrWhiteSpace(txtComentarioReparacion.Text))
         {
-            sb.AppendLine("Reparación:");
-            sb.AppendLine(txtComentarioReparacion.Text.Trim());
+            sb.AppendLine($"- Reparación: {txtComentarioReparacion.Text.Trim()}");
         }
 
         if (!string.IsNullOrWhiteSpace(txtComentarioGeneral.Text))
         {
-            sb.AppendLine("Comentarios generales:");
-            sb.AppendLine(txtComentarioGeneral.Text.Trim());
+            sb.AppendLine($"- Comentarios generales: {txtComentarioGeneral.Text.Trim()}");
         }
-
         return sb.ToString().Trim();
     }
     protected override async void OnDisappearing()

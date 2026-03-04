@@ -18,6 +18,14 @@ namespace CarslineApp.ViewModels.ViewModelsHome
         private bool _isLoading;
         private string _nombreUsuarioActual = string.Empty;
         private DateTime _fechaSeleccionada = DateTime.Today;
+        private static readonly HashSet<string> TrabajossinRefacciones = new(StringComparer.OrdinalIgnoreCase) 
+        {
+            "alineación",
+            "balanceo",
+            "lavado de cuerpo de aceleración",
+            "rectificado de discos/tambores delanteros",
+            "rectificado de discos/tambores traseros"
+        };
         // ✅ LISTA ÚNICA AGRUPADA
         private ObservableCollection<GrupoCitas> _todasLasCitasAgrupadas = new();
 
@@ -37,8 +45,7 @@ namespace CarslineApp.ViewModels.ViewModelsHome
             LogoutCommand = new Command(async () => await OnLogout());
 
             // ✅ Navegar a refacciones del trabajo de cita seleccionado
-            AbrirRefaccionesTrabajoCommand = new Command<TrabajoCitaDto>(
-                async (trabajo) => await AbrirRefaccionesTrabajo(trabajo));
+            AbrirRefaccionesTrabajoCommand = new Command<TrabajoCitaDto>(async (trabajo) => await AbrirRefaccionesTrabajo(trabajo));
 
             NombreUsuarioActual = Preferences.Get("user_name", "Encargado Refacciones");
         }
@@ -206,7 +213,130 @@ namespace CarslineApp.ViewModels.ViewModelsHome
                 IsLoading = false;
             }
         }
+        private bool TrabajRequiereRefacciones(TrabajoCitaDto trabajo)
+        {
+            if (string.IsNullOrWhiteSpace(trabajo.Trabajo))
+                return false;
 
+            // Verificar si el nombre del trabajo contiene 
+            // alguna palabra clave de trabajos sin refacciones
+            return !TrabajossinRefacciones.Any(t =>
+                trabajo.Trabajo.Contains(t, StringComparison.OrdinalIgnoreCase));
+        }
+        private async Task CargarCitas()
+        {
+            IsLoading = true;
+            try
+            {
+                var citasList = await _apiService
+                    .ObtenerTrabajosCitasPorFechaAsync(
+                        TipoCitaSeleccionado,
+                        FechaSeleccionada);
+
+                System.Diagnostics.Debug.WriteLine(
+                    $"📦 Órdenes recibidas: {citasList?.Count ?? 0}");
+
+                if (citasList == null || !citasList.Any())
+                {
+                    TodasLasCitasAgrupadas = new ObservableCollection<GrupoCitas>();
+                    return;
+                }
+
+                var citasListas = new List<CitaConTrabajosDto>();
+                var citasPendientes = new List<CitaConTrabajosDto>();
+
+                foreach (var cita in citasList)
+                {
+                    if (cita == null) continue;
+
+                    // ✅ Filtrar solo trabajos que SÍ requieren refacciones
+                    var trabajosQueRequierenRefacciones = cita.Trabajos
+                        .Where(t => TrabajRequiereRefacciones(t))
+                        .ToList();
+
+                    System.Diagnostics.Debug.WriteLine(
+                        $"🔍 Cita VIN:{cita.VIN} | " +
+                        $"Total trabajos: {cita.Trabajos.Count} | " +
+                        $"Requieren refacciones: {trabajosQueRequierenRefacciones.Count}");
+
+                    // Si NO hay trabajos que requieran refacciones
+                    // (todos son alineación, balanceo, etc.)
+                    // se considera lista automáticamente
+                    if (!trabajosQueRequierenRefacciones.Any())
+                    {
+                        cita.RefaccionesListas = true;
+                        citasListas.Add(cita);
+                        System.Diagnostics.Debug.WriteLine(
+                            $"⚡ Cita VIN:{cita.VIN} → Lista automática " +
+                            $"(solo trabajos sin refacciones)");
+                    }
+                    // Si TODOS los trabajos que requieren refacciones están listos
+                    else if (trabajosQueRequierenRefacciones.All(t => t.RefaccionesListas))
+                    {
+                        cita.RefaccionesListas = true;
+                        citasListas.Add(cita);
+                        System.Diagnostics.Debug.WriteLine(
+                            $"✅ Cita VIN:{cita.VIN} → Refacciones listas");
+                    }
+                    // Si al menos uno está pendiente
+                    else
+                    {
+                        cita.RefaccionesListas = false;
+                        citasPendientes.Add(cita);
+
+                        // Log de cuáles están pendientes
+                        var pendientes = trabajosQueRequierenRefacciones
+                            .Where(t => !t.RefaccionesListas)
+                            .Select(t => t.Trabajo);
+
+                        System.Diagnostics.Debug.WriteLine(
+                            $"⏳ Cita VIN:{cita.VIN} → Pendientes: " +
+                            $"{string.Join(", ", pendientes)}");
+                    }
+
+                    EnriquecerCita(cita);
+                }
+
+                var grupos = new ObservableCollection<GrupoCitas>();
+
+                if (citasPendientes.Any())
+                {
+                    grupos.Add(new GrupoCitas(
+                        "📋 Refacciones Pendientes",
+                        "#FFE5E5",
+                        "#B00000",
+                        "Black",
+                        citasPendientes
+                    ));
+                }
+
+                if (citasListas.Any())
+                {
+                    grupos.Add(new GrupoCitas(
+                        "✅ Refacciones compradas",
+                        "#F1F8F4",
+                        "#4CAF50",
+                        "#404040",
+                        citasListas
+                    ));
+                }
+
+                TodasLasCitasAgrupadas = grupos;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ ERROR: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    $"Error al cargar citas: {ex.Message}",
+                    "OK");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+        /*
         private async Task CargarCitas()
         {
             IsLoading = true;
@@ -281,7 +411,7 @@ namespace CarslineApp.ViewModels.ViewModelsHome
             {
                 IsLoading = false;
             }
-        }
+        }*/
         /// <summary>
         /// Enriquece la cita con propiedades calculadas para la UI
         /// </summary>

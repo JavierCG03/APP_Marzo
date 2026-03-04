@@ -55,9 +55,59 @@ namespace CarslineApp.Services
                 }
             }
 
-            /// <summary>
-            /// Obtener todas las refacciones de un trabajo
-            /// </summary>
+        /// <summary>
+        /// Transferir refacción comprada a refacción de trabajo
+        /// </summary>
+        public async Task<AgregarRefaccionesResponse> TransferirRefaccionComprada(
+            int refaccionCompradaId,
+            decimal precioVenta)
+        {
+            try
+            {
+                Debug.WriteLine($"🔄 Transfiriendo refacción comprada {refaccionCompradaId} con precio de venta ${precioVenta:N2}");
+
+                var request = new TransferirRefaccionRequest
+                {
+                    RefaccionCompradaId = refaccionCompradaId,
+                    PrecioVenta = precioVenta
+                };
+
+                var response = await _httpClient.PostAsJsonAsync(
+                    $"{BaseUrl}/RefaccionesTrabajo/transferir",
+                    request);
+
+                var content = await response.Content
+                    .ReadFromJsonAsync<AgregarRefaccionesResponse>();
+
+                if (content != null)
+                {
+                    Debug.WriteLine(content.Success
+                        ? $"✅ Refacción transferida exitosamente"
+                        : $"❌ Error al transferir: {content.Message}");
+
+                    return content;
+                }
+
+                return new AgregarRefaccionesResponse
+                {
+                    Success = false,
+                    Message = $"Error HTTP: {response.StatusCode}"
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"❌ Error al transferir refacción comprada: {ex.Message}");
+                return new AgregarRefaccionesResponse
+                {
+                    Success = false,
+                    Message = $"Error: {ex.Message}"
+                };
+            }
+        }
+
+        /// <summary>
+        /// Obtener todas las refacciones de un trabajo
+        /// </summary>
         public async Task<ObtenerRefaccionesTrabajoResponse> ObtenerRefaccionesPorTrabajo(int trabajoId)
             {
                 try

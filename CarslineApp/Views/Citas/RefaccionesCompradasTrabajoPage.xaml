@@ -165,7 +165,9 @@
                                                Text="{Binding PrecioTexto}"
                                                Keyboard="Numeric" BackgroundColor="White"
                                                PlaceholderColor="#AAA" TextColor="#333"
-                                               FontSize="12" HeightRequest="36" Margin="5,0"/>
+                                               FontSize="12" HeightRequest="36" Margin="5,0"
+                                               ReturnCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:RefaccionesCompradasTrabajoViewModel}}, Path=AgregarPredeterminadaCommand}"
+                                               ReturnCommandParameter="{Binding .}"/>
                                             </Frame>
 
 
@@ -338,17 +340,17 @@
                                        FontAttributes="Bold"
                                        HorizontalTextAlignment="Center"
                                        VerticalOptions="Center"/>
-
-                                        <!-- Botón eliminar -->
+                                        
                                         <ImageButton Grid.Column="4"
-                                             BackgroundColor="Transparent"
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:RefaccionesCompradasTrabajoViewModel}}, Path=EliminarRefaccionCommand}"
-                                             CommandParameter="{Binding .}"
-                                             Source="borrar.png"
-                                             WidthRequest="28" HeightRequest="28"
-                                             VerticalOptions="Center"
-                                             HorizontalOptions="Center"
-                                             IsVisible="{Binding PuedeEditar}"/>
+                                                         BackgroundColor="Transparent"
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:RefaccionesCompradasTrabajoViewModel}}, Path=EliminarRefaccionCommand}"
+                                                         CommandParameter="{Binding .}"
+                                                         Source="borrar.png"
+                                                         WidthRequest="32" HeightRequest="32"
+                                                         VerticalOptions="Center"
+                                                         IsVisible="{Binding PuedeEditar}"
+                                                         HorizontalOptions="Center"/>
+
                                     </Grid>
                                 </SwipeView>
                             </DataTemplate>
