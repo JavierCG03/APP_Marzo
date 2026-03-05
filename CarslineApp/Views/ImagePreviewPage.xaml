@@ -5,19 +5,20 @@
              BackgroundColor="#0F0F0F"
              Shell.NavBarIsVisible="False">
 
-    <Grid RowDefinitions="56,*,50" ColumnDefinitions="*">
+    <Grid RowDefinitions="56,*,60
+          " ColumnDefinitions="*">
 
         <!-- ═══ HEADER PROFESIONAL ═══ -->
         <Grid Grid.Row="0"
               Grid.Column="0"
               BackgroundColor="#1A1A1A"
               Padding="0"
-              ColumnDefinitions="50,*,50,50,50">
+              ColumnDefinitions="50,*">
 
             <!-- Botón Atrás -->
             <Button Grid.Column="0"
                     Text="←"
-                    FontSize="24"
+                    FontSize="40"
                     TextColor="White"
                     BackgroundColor="Transparent"
                     Clicked="OnBackClicked"
@@ -28,40 +29,11 @@
             <Label Grid.Column="1"
                    Text="Vista Previa"
                    TextColor="White"
-                   FontSize="18"
+                   FontSize="20"
                    FontAttributes="Bold"
                    VerticalOptions="Center"
                    HorizontalTextAlignment="Center" />
 
-            <!-- Indicador Zoom -->
-            <Label Grid.Column="2"
-                   x:Name="ZoomLabel"
-                   Text="100%"
-                   TextColor="#00D4FF"
-                   FontSize="13"
-                   FontAttributes="Bold"
-                   VerticalOptions="Center"
-                   HorizontalOptions="Center" />
-
-            <!-- Botón Zoom In -->
-            <Button Grid.Column="3"
-                    Text="+"
-                    FontSize="20"
-                    TextColor="White"
-                    BackgroundColor="Transparent"
-                    Clicked="OnZoomInClicked"
-                    Padding="5"
-                    CornerRadius="20" />
-
-            <!-- Botón Zoom Out -->
-            <Button Grid.Column="4"
-                    Text="−"
-                    FontSize="20"
-                    TextColor="White"
-                    BackgroundColor="Transparent"
-                    Clicked="OnZoomOutClicked"
-                    Padding="5"
-                    CornerRadius="20" />
         </Grid> 
 
         <!-- ═══ CONTENEDOR DE IMAGEN ═══ -->
@@ -89,34 +61,64 @@
                               Color="#00D4FF"
                               Scale="1.5" />
         </Grid>
-
-
         <!-- ═══ FOOTER CON CONTROLES ═══ -->
         <Grid Grid.Row="2"
-              Grid.Column="0"
-              BackgroundColor="#1A1A1A"
-              Padding="10,0"
-              ColumnDefinitions="*,*,*,*">
+          Margin="0,0,0,30"
+          Grid.Column="0"
+          Padding="10,0"
+          ColumnDefinitions="*,*,*,*,*,Auto,*">
+       
+            <ImageButton Grid.Column="0"
+                         Source="compartir.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         Clicked="OnShareClicked">
+            </ImageButton>
+            
+            <ImageButton Grid.Column="1"
+                         Source="descargar.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         Clicked="OnDownloadClicked">
+            </ImageButton>
+            
+            <ImageButton Grid.Column="3"
+                         Source="reset.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         Clicked="OnResetClicked">
+            </ImageButton>
 
-            <!-- Reset -->
-            <Button Grid.Column="0" Grid.ColumnSpan="2"
-                    Text="🔄 Reset"
-                    FontSize="11"
-                    TextColor="White"
-                    BackgroundColor="#2A2A2A"
-                    Clicked="OnResetClicked"
-                    CornerRadius="5"
-                    Padding="5" />
 
-            <!-- Info -->
-            <Button Grid.Column="3"
-                    Text="ℹ️ Info"
-                    FontSize="11"
-                    TextColor="White"
-                    BackgroundColor="#2A2A2A"
-                    Clicked="OnInfoClicked"
-                    CornerRadius="5"
-                    Padding="5" />
+
+
+            <ImageButton Grid.Column="4"
+                         Source="zoom.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         Clicked="OnZoomInClicked">
+            </ImageButton>
+            
+            <Label Grid.Column="5"
+                   x:Name="ZoomLabel"
+                   Text="100%"
+                   TextColor="#00D4FF"
+                   FontSize="15"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center" />
+
+            <ImageButton Grid.Column="6"
+                         Source="zoomout.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         Clicked="OnZoomOutClicked">
+            </ImageButton>
 
         </Grid>
     </Grid>

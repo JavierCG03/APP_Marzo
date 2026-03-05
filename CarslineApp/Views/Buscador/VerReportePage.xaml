@@ -2,42 +2,125 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CarslineApp.Views.Buscador.VerReportePage"
-             Title="Reporte de Orden">
+             BackgroundColor="#0F0F0F"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
 
-    <Grid VerticalOptions="FillAndExpand" 
-          HorizontalOptions="FillAndExpand"
-          Margin="10">
+    <Grid RowDefinitions="56,*,60"
+          ColumnDefinitions="*">
 
-        <!-- Visor de PDF -->
-        <WebView x:Name="pdfview" 
-                 VerticalOptions="FillAndExpand"
-                 HorizontalOptions="FillAndExpand" />
+        <!-- ═══ HEADER ═══ -->
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              BackgroundColor="#1A1A1A"
+              Padding="0"
+              ColumnDefinitions="50,*">
 
-        <!-- Indicador de carga (opcional) -->
-        <Grid x:Name="LoadingIndicator"
-              IsVisible="False"
-              BackgroundColor="#80000000"
-              VerticalOptions="FillAndExpand"
-              HorizontalOptions="FillAndExpand">
-
-            <VerticalStackLayout 
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                Spacing="15">
-
-                <ActivityIndicator 
-                    IsRunning="True"
-                    Color="White"
-                    WidthRequest="50"
-                    HeightRequest="50"/>
-
-                <Label 
-                    Text="Cargando PDF..."
+            <!-- Botón Atrás -->
+            <Button Grid.Column="0"
+                    Text="←"
+                    VerticalOptions="Center"
+                    FontSize="40"
                     TextColor="White"
-                    FontSize="16"
-                    HorizontalTextAlignment="Center"/>
-            </VerticalStackLayout>
+                    BackgroundColor="Transparent"
+                    Clicked="OnBackClicked"
+                    Padding="5"
+                    CornerRadius="25" />
+
+            <!-- Título -->
+            <Label Grid.Column="1"
+                   Text="Reporte de Orden"
+                   TextColor="White"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   HorizontalTextAlignment="Center" />
+
+        </Grid>
+
+        <!-- ═══ VISOR PDF ═══ -->
+        <Grid Grid.Row="1"
+              Grid.Column="0">
+
+            <WebView x:Name="pdfview"
+                     VerticalOptions="FillAndExpand"
+                     HorizontalOptions="FillAndExpand" />
+
+            <!-- Indicador de carga -->
+            <Grid x:Name="LoadingIndicator"
+                  IsVisible="False"
+                  BackgroundColor="#80000000"
+                  VerticalOptions="FillAndExpand"
+                  HorizontalOptions="FillAndExpand">
+
+                <VerticalStackLayout
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Spacing="15">
+
+                    <ActivityIndicator
+                        IsRunning="True"
+                        Color="#00D4FF"
+                        WidthRequest="50"
+                        HeightRequest="50"/>
+
+                    <Label
+                        Text="Cargando PDF..."
+                        TextColor="White"
+                        FontSize="16"
+                        HorizontalTextAlignment="Center"/>
+
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+
+        <!-- ═══ FOOTER CON CONTROLES ═══ -->
+        <Grid Grid.Row="2"
+              Margin="0,0,0,40"
+              Grid.Column="0"
+              Padding="10,0"
+              ColumnDefinitions="*,*,*,*">
+
+            <!-- Compartir -->
+            <ImageButton Grid.Column="0"
+                         Source="compartir.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Clicked="OnShareClicked" />
+
+            <!-- Descargar -->
+            <ImageButton Grid.Column="1"
+                         Source="descargar.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Clicked="OnDownloadClicked" />
+
+            <!-- Abrir con... -->
+            <ImageButton Grid.Column="2"
+                         Source="pdf.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Clicked="OnOpenWithClicked" />
+
+            <!-- Imprimir (opcional, placeholder) -->
+            <ImageButton Grid.Column="3"
+                         Source="imprimir.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Clicked="OnPrintClicked" />
+
         </Grid>
     </Grid>
-
 </ContentPage>

@@ -9,11 +9,14 @@ public partial class VerReportePage : ContentPage
     private bool _isLoading;
     private int _ordenId;
 
+    // Ruta del PDF en caché (disponible tras carga)
+    private string _pdfCachedPath;
+
     public VerReportePage(int ordenId)
     {
         InitializeComponent();
         _ordenId = ordenId;
-        _apiService = new ApiService(); 
+        _apiService = new ApiService();
 
 #if ANDROID
         ConfigurarWebViewAndroid();
@@ -21,6 +24,122 @@ public partial class VerReportePage : ContentPage
 
         _ = CargarPdfAsync();
     }
+
+    // ??? BOTONES DE NAVEGACIÓN ???
+
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopModalAsync();
+    }
+
+    // ??? BOTONES DEL FOOTER ???
+
+    private async void OnShareClicked(object sender, EventArgs e)
+    {
+        if (_pdfCachedPath == null || !File.Exists(_pdfCachedPath))
+        {
+            await DisplayAlert("Aviso", "El PDF aún no está disponible.", "OK");
+            return;
+        }
+
+        try
+        {
+            await Share.Default.RequestAsync(new ShareFileRequest
+            {
+                Title = "Compartir PDF",
+                File = new ShareFile(_pdfCachedPath)
+            });
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"No se pudo compartir el PDF: {ex.Message}", "OK");
+        }
+    }
+
+    private async void OnDownloadClicked(object sender, EventArgs e)
+    {
+        if (_pdfCachedPath == null || !File.Exists(_pdfCachedPath))
+        {
+            await DisplayAlert("Aviso", "El PDF aún no está disponible.", "OK");
+            return;
+        }
+
+        try
+        {
+            LoadingIndicator.IsVisible = true;
+
+#if ANDROID
+            await GuardarPdfAndroidAsync(_pdfCachedPath);
+#elif IOS
+            await GuardarPdfIOSAsync(_pdfCachedPath);
+#elif WINDOWS
+            await GuardarPdfWindowsAsync(_pdfCachedPath);
+#else
+            await DisplayAlert("Info", "Descarga no soportada en esta plataforma.", "OK");
+#endif
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"No se pudo guardar el PDF: {ex.Message}", "OK");
+        }
+        finally
+        {
+            LoadingIndicator.IsVisible = false;
+        }
+    }
+
+    private async void OnOpenWithClicked(object sender, EventArgs e)
+    {
+        if (_pdfCachedPath == null || !File.Exists(_pdfCachedPath))
+        {
+            await DisplayAlert("Aviso", "El PDF aún no está disponible.", "OK");
+            return;
+        }
+
+        try
+        {
+            await Launcher.Default.OpenAsync(
+                new OpenFileRequest
+                {
+                    Title = "Abrir PDF con...",
+                    File = new ReadOnlyFile(_pdfCachedPath)
+                });
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"No se pudo abrir el PDF: {ex.Message}", "OK");
+        }
+    }
+
+    private async void OnPrintClicked(object sender, EventArgs e)
+    {
+        // Reutilizamos el diálogo de compartir como método de impresión universal
+        await OnSharePdfAsync("Imprimir / Enviar PDF");
+    }
+
+    private async Task OnSharePdfAsync(string title)
+    {
+        if (_pdfCachedPath == null || !File.Exists(_pdfCachedPath))
+        {
+            await DisplayAlert("Aviso", "El PDF aún no está disponible.", "OK");
+            return;
+        }
+
+        try
+        {
+            await Share.Default.RequestAsync(new ShareFileRequest
+            {
+                Title = title,
+                File = new ShareFile(_pdfCachedPath)
+            });
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"No se pudo procesar la acción: {ex.Message}", "OK");
+        }
+    }
+
+    // ??? CARGA DEL PDF ???
 
 #if ANDROID
     private void ConfigurarWebViewAndroid()
@@ -40,11 +159,8 @@ public partial class VerReportePage : ContentPage
         try
         {
             _isLoading = true;
-
-            // Mostrar indicador de carga (opcional)
             LoadingIndicator.IsVisible = true;
 
-            // Llamar al servicio API para obtener el PDF
             var response = await _apiService.ObtenerVistaPreviaPdfAsync(_ordenId);
 
             if (!response.Success || string.IsNullOrEmpty(response.PdfBase64))
@@ -53,15 +169,12 @@ public partial class VerReportePage : ContentPage
                 return;
             }
 
-            // Convertir el Base64 a bytes
             byte[] pdfBytes = Convert.FromBase64String(response.PdfBase64);
 
-            // Determinar el nombre del archivo
             string fileName = string.IsNullOrEmpty(response.NumeroOrden)
                 ? $"Orden_{_ordenId}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
                 : $"Orden_{response.NumeroOrden}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
 
-            // Guardar y mostrar el PDF según la plataforma
             await GuardarYMostrarPdfAsync(pdfBytes, fileName);
         }
         catch (Exception ex)
@@ -94,29 +207,59 @@ public partial class VerReportePage : ContentPage
     {
         try
         {
-            // Guardar en el directorio de caché interno de la app
             string cachePath = FileSystem.Current.CacheDirectory;
             string filePath = Path.Combine(cachePath, fileName);
-            
+
             await File.WriteAllBytesAsync(filePath, pdfBytes);
-            
-            System.Diagnostics.Debug.WriteLine($"PDF guardado en: {filePath}");
-            
-            // Usar PDF.js para mostrar el PDF
-            string encodedFileName = WebUtility.UrlEncode(fileName);
-            
-            // Opción 1: Si el PDF está en la carpeta de caché
+
+            // Guardar ruta para botones de acción
+            _pdfCachedPath = filePath;
+
             string pdfUrl = $"file://{filePath}";
             string viewerUrl = $"file:///android_asset/pdfjs/web/viewer.html?file={WebUtility.UrlEncode(pdfUrl)}";
-            
+
             pdfview.Source = viewerUrl;
-            
-            System.Diagnostics.Debug.WriteLine($"Mostrando PDF desde: {viewerUrl}");
+
+            System.Diagnostics.Debug.WriteLine($"PDF cargado desde: {viewerUrl}");
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error en GuardarYMostrarPdfAndroidAsync: {ex}");
             await DisplayAlert("Error", $"No se pudo mostrar el PDF en Android: {ex.Message}", "OK");
+        }
+    }
+
+    private async Task GuardarPdfAndroidAsync(string sourcePath)
+    {
+        try
+        {
+            var status = await Permissions.RequestAsync<Permissions.StorageWrite>();
+            if (status != PermissionStatus.Granted)
+            {
+                await DisplayAlert("Permiso denegado", "Se necesita acceso al almacenamiento.", "OK");
+                return;
+            }
+
+            string docsPath = Android.OS.Environment.GetExternalStoragePublicDirectory(
+                Android.OS.Environment.DirectoryDownloads).AbsolutePath;
+
+            string destFolder = Path.Combine(docsPath, "Carsline");
+            Directory.CreateDirectory(destFolder);
+
+            string destPath = Path.Combine(destFolder, Path.GetFileName(sourcePath));
+            File.Copy(sourcePath, destPath, overwrite: true);
+
+            // Notificar al sistema de archivos
+            var mediaScanIntent = new Android.Content.Intent(
+                Android.Content.Intent.ActionMediaScannerScanFile);
+            mediaScanIntent.SetData(Android.Net.Uri.FromFile(new Java.IO.File(destPath)));
+            Android.App.Application.Context.SendBroadcast(mediaScanIntent);
+
+            await DisplayAlert("? Guardado", "PDF guardado en:\nDescargas/Carsline", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "OK");
         }
     }
 #endif
@@ -131,7 +274,8 @@ public partial class VerReportePage : ContentPage
 
             await File.WriteAllBytesAsync(filePath, pdfBytes);
 
-            // iOS puede mostrar PDFs nativamente en el WebView
+            _pdfCachedPath = filePath;
+
             pdfview.Source = filePath;
         }
         catch (Exception ex)
@@ -139,6 +283,16 @@ public partial class VerReportePage : ContentPage
             System.Diagnostics.Debug.WriteLine($"Error en GuardarYMostrarPdfIOSAsync: {ex}");
             await DisplayAlert("Error", $"No se pudo mostrar el PDF en iOS: {ex.Message}", "OK");
         }
+    }
+
+    private async Task GuardarPdfIOSAsync(string sourcePath)
+    {
+        // En iOS usamos el share sheet nativo que incluye "Guardar en Archivos"
+        await Share.Default.RequestAsync(new ShareFileRequest
+        {
+            Title = "Guardar PDF",
+            File = new ShareFile(sourcePath)
+        });
     }
 #endif
 
@@ -149,16 +303,45 @@ public partial class VerReportePage : ContentPage
         {
             string cachePath = FileSystem.Current.CacheDirectory;
             string filePath = Path.Combine(cachePath, fileName);
-            
+
             await File.WriteAllBytesAsync(filePath, pdfBytes);
-            
-            // Windows: usar URI absoluta
+
+            _pdfCachedPath = filePath;
+
             pdfview.Source = new Uri(filePath).AbsoluteUri;
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error en GuardarYMostrarPdfWindowsAsync: {ex}");
             await DisplayAlert("Error", $"No se pudo mostrar el PDF en Windows: {ex.Message}", "OK");
+        }
+    }
+
+    private async Task GuardarPdfWindowsAsync(string sourcePath)
+    {
+        try
+        {
+            var picker = new Windows.Storage.Pickers.FileSavePicker();
+
+            var hwnd = ((MauiWinUIWindow)Application.Current.Windows[0].Handler.PlatformView).WindowHandle;
+            WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
+
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+            picker.SuggestedFileName = Path.GetFileNameWithoutExtension(sourcePath);
+            picker.FileTypeChoices.Add("Documento PDF", new List<string> { ".pdf" });
+
+            var file = await picker.PickSaveFileAsync();
+            if (file == null) return;
+
+            using var sourceStream = File.OpenRead(sourcePath);
+            using var destStream = await file.OpenStreamForWriteAsync();
+            await sourceStream.CopyToAsync(destStream);
+
+            await DisplayAlert("? Guardado", $"PDF guardado en:\n{file.Path}", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "OK");
         }
     }
 #endif
@@ -172,6 +355,8 @@ public partial class VerReportePage : ContentPage
 
             await File.WriteAllBytesAsync(filePath, pdfBytes);
 
+            _pdfCachedPath = filePath;
+
             pdfview.Source = filePath;
         }
         catch (Exception ex)
@@ -180,6 +365,8 @@ public partial class VerReportePage : ContentPage
             await DisplayAlert("Error", $"No se pudo mostrar el PDF: {ex.Message}", "OK");
         }
     }
+
+    // ??? LIMPIEZA ???
 
     protected override void OnDisappearing()
     {
@@ -201,7 +388,6 @@ public partial class VerReportePage : ContentPage
                     try
                     {
                         var fileInfo = new FileInfo(file);
-                        // Eliminar archivos más antiguos de 24 horas
                         if (DateTime.Now - fileInfo.CreationTime > TimeSpan.FromHours(24))
                         {
                             File.Delete(file);
