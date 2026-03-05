@@ -2,45 +2,17 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CarslineApp.Views.Buscador.VerReportePage"
-             BackgroundColor="#0F0F0F"
-             NavigationPage.HasNavigationBar="False"
-             Shell.NavBarIsVisible="False">
+             BackgroundColor="Transparent"
+             Shell.NavBarIsVisible="False"
+             Title="Reporte de Orden">
 
-    <Grid RowDefinitions="56,*,60"
+    <Grid RowDefinitions="*,60"
           ColumnDefinitions="*">
 
-        <!-- ═══ HEADER ═══ -->
+        <!-- ═══ VISOR PDF ═══ -->
         <Grid Grid.Row="0"
               Grid.Column="0"
-              BackgroundColor="#1A1A1A"
-              Padding="0"
-              ColumnDefinitions="50,*">
-
-            <!-- Botón Atrás -->
-            <Button Grid.Column="0"
-                    Text="←"
-                    VerticalOptions="Center"
-                    FontSize="40"
-                    TextColor="White"
-                    BackgroundColor="Transparent"
-                    Clicked="OnBackClicked"
-                    Padding="5"
-                    CornerRadius="25" />
-
-            <!-- Título -->
-            <Label Grid.Column="1"
-                   Text="Reporte de Orden"
-                   TextColor="White"
-                   FontSize="20"
-                   FontAttributes="Bold"
-                   VerticalOptions="Center"
-                   HorizontalTextAlignment="Center" />
-
-        </Grid>
-
-        <!-- ═══ VISOR PDF ═══ -->
-        <Grid Grid.Row="1"
-              Grid.Column="0">
+              Margin="12">
 
             <WebView x:Name="pdfview"
                      VerticalOptions="FillAndExpand"
@@ -75,11 +47,11 @@
         </Grid>
 
         <!-- ═══ FOOTER CON CONTROLES ═══ -->
-        <Grid Grid.Row="2"
-              Margin="0,0,0,40"
+        <Grid Grid.Row="1"
+              Margin="0,0,0,20"
               Grid.Column="0"
               Padding="10,0"
-              ColumnDefinitions="*,*,*,*">
+              ColumnDefinitions="50,50,50">
 
             <!-- Compartir -->
             <ImageButton Grid.Column="0"
@@ -110,16 +82,6 @@
                          HorizontalOptions="Center"
                          VerticalOptions="Center"
                          Clicked="OnOpenWithClicked" />
-
-            <!-- Imprimir (opcional, placeholder) -->
-            <ImageButton Grid.Column="3"
-                         Source="imprimir.png"
-                         BackgroundColor="Transparent"
-                         WidthRequest="40"
-                         HeightRequest="40"
-                         HorizontalOptions="Center"
-                         VerticalOptions="Center"
-                         Clicked="OnPrintClicked" />
 
         </Grid>
     </Grid>

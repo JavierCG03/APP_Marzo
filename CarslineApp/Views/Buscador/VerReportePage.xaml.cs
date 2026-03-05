@@ -64,6 +64,15 @@ public partial class VerReportePage : ContentPage
             return;
         }
 
+        // ? Confirmación antes de descargar
+        bool confirmar = await DisplayAlert(
+            "Descargar PDF",
+            "¿Deseas guardar el PDF en tu dispositivo?",
+            "Descargar",
+            "Cancelar");
+
+        if (!confirmar) return;
+
         try
         {
             LoadingIndicator.IsVisible = true;
@@ -111,12 +120,6 @@ public partial class VerReportePage : ContentPage
         }
     }
 
-    private async void OnPrintClicked(object sender, EventArgs e)
-    {
-        // Reutilizamos el diálogo de compartir como método de impresión universal
-        await OnSharePdfAsync("Imprimir / Enviar PDF");
-    }
-
     private async Task OnSharePdfAsync(string title)
     {
         if (_pdfCachedPath == null || !File.Exists(_pdfCachedPath))
@@ -138,8 +141,6 @@ public partial class VerReportePage : ContentPage
             await DisplayAlert("Error", $"No se pudo procesar la acción: {ex.Message}", "OK");
         }
     }
-
-    // ??? CARGA DEL PDF ???
 
 #if ANDROID
     private void ConfigurarWebViewAndroid()

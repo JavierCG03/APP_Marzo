@@ -83,7 +83,7 @@
                          HeightRequest="40"
                          Clicked="OnDownloadClicked">
             </ImageButton>
-            
+
             <ImageButton Grid.Column="3"
                          Source="reset.png"
                          BackgroundColor="Transparent"
@@ -91,10 +91,7 @@
                          HeightRequest="40"
                          Clicked="OnResetClicked">
             </ImageButton>
-
-
-
-
+            
             <ImageButton Grid.Column="4"
                          Source="zoom.png"
                          BackgroundColor="Transparent"
