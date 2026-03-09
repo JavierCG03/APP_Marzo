@@ -18,7 +18,7 @@ public partial class EvidenciasOrdenTrabajo : ContentPage
             viewModel.OrdenGeneralId = ordenGeneralId;
             viewModel.TipoEvidencia = tipoevidenica;
 
-            // Asignar referencia al ScrollView para la navegación
+            // Asignar referencia al ScrollView para la navegaci?n
             viewModel.SetScrollView(CarouselScrollView);
         }
         else

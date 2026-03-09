@@ -156,8 +156,7 @@ namespace CarslineApp.ViewModels
         }
 
         // Solo true en Windows — se evalúa una vez al inicio, no cambia en runtime
-        public static bool EsWindows =>
-            DeviceInfo.Platform == DevicePlatform.WinUI;
+        public static bool EsWindows => DeviceInfo.Platform == DevicePlatform.WinUI;
 
         public bool MostrarBotonAnterior
         {

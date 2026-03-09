@@ -1,4 +1,4 @@
-using CarslineApp.Models;
+ï»¿using CarslineApp.Models;
 using CarslineApp.Services;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -54,8 +54,8 @@ public partial class RecordatorioDetallePage : ContentPage
             }
             else
             {
-                Debug.WriteLine($"?? No se encontró el recordatorio: {response.Message}");
-                await DisplayAlert("Advertencia", response.Message ?? "No se encontró el recordatorio", "OK");
+                Debug.WriteLine($"?? No se encontro el recordatorio: {response.Message}");
+                await DisplayAlert("Advertencia", response.Message ?? "No se encontrï¿½ el recordatorio", "OK");
                 await Navigation.PopAsync();
             }
         }
@@ -88,43 +88,43 @@ public partial class RecordatorioDetallePage : ContentPage
             lblClienteNombre.Text = _recordatorioDetalle.ClienteNombre;
             lblClienteTelefono.Text = !string.IsNullOrEmpty(_recordatorioDetalle.Telefono)
                 ? _recordatorioDetalle.Telefono
-                : "Sin teléfono";
-            lblClienteTelefonoCasa.Text = _recordatorioDetalle.TelefonoCasa ?? "Sin teléfono";
+                : "Sin telï¿½fono";
+            lblClienteTelefonoCasa.Text = _recordatorioDetalle.TelefonoCasa ?? "Sin telefono";
             lblClienteCorreo.Text = _recordatorioDetalle.Correo;
 
-            // Vehículo
+            // Vehiculo
             lblVehiculoInfo.Text = _recordatorioDetalle.InfoVehiculo;
             lblVIN.Text = _recordatorioDetalle.VIN;
             lblPlacas.Text = _recordatorioDetalle.Placas;
 
-            // Último servicio
+            // ultimo servicio
             lblUltimoServicio.Text = _recordatorioDetalle.UltimoServicioRealizado;
             lblFechaUltimoServicio.Text = _recordatorioDetalle.FechaUltimoServicio.ToString("dd/MMM/yyyy");
             lblUltimoKilometraje.Text = $"{_recordatorioDetalle.UltimoKilometraje:N0} km";
 
-            // Próximo servicio
+            // Proximo servicio
             lblProximoServicio.Text = _recordatorioDetalle.TipoProximoServicio;
             lblFechaProximoServicio.Text = _recordatorioDetalle.FechaProximoServicioFormateada;
             lblProximoKilometraje.Text = _recordatorioDetalle.KilometrajeProximoServicio.HasValue
                 ? $"{_recordatorioDetalle.KilometrajeProximoServicio:N0} km"
                 : "N/A";
 
-            // Calcular días
+            // Calcular dï¿½as
             var diasDesdeUltimo = (DateTime.Today - _recordatorioDetalle.FechaUltimoServicio.Date).Days;
             var diasParaProximo = _recordatorioDetalle.DiasParaProximoServicio ?? -1;
 
-            lblDiasDesdeUltimo.Text = $"{diasDesdeUltimo} días";
-            lblDiasParaProximo.Text = $"{diasParaProximo} días";
+            lblDiasDesdeUltimo.Text = $"{diasDesdeUltimo} dÃ­as";
+            lblDiasParaProximo.Text = $"{diasParaProximo} dÃ­as";
 
-            Debug.WriteLine("? Datos mostrados correctamente en la UI");
+            Debug.WriteLine(" Datos mostrados correctamente en la UI");
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"? Error al mostrar datos: {ex.Message}");
+            Debug.WriteLine($"Error al mostrar datos: {ex.Message}");
         }
     }
 
-    #region Métodos de Comunicación
+    #region Mï¿½todos de Comunicaciï¿½n
 
     /// <summary>
     /// Enviar mensaje de WhatsApp con recordatorio de servicio
@@ -140,7 +140,7 @@ public partial class RecordatorioDetallePage : ContentPage
 
         if (string.IsNullOrWhiteSpace(telefono))
         {
-            await DisplayAlert("?? Advertencia", "No hay número de teléfono disponible", "OK");
+            await DisplayAlert("Advertencia", "No hay numero de telï¿½fono disponible", "OK");
             return;
         }
 
@@ -148,10 +148,10 @@ public partial class RecordatorioDetallePage : ContentPage
         {
             Debug.WriteLine($"?? Abriendo WhatsApp para: {telefono}");
 
-            // Limpiar el número de teléfono
+            // Limpiar el nï¿½mero de telï¿½fono
             var telefonoLimpio = LimpiarNumeroTelefono(telefono);
 
-            // Agregar código de país si no lo tiene (México +52)
+            // Agregar cï¿½digo de paï¿½s si no lo tiene (Mï¿½xico +52)
             if (!telefonoLimpio.StartsWith("+"))
             {
                 telefonoLimpio = "+52" + telefonoLimpio;
@@ -173,12 +173,12 @@ public partial class RecordatorioDetallePage : ContentPage
         catch (Exception ex)
         {
             Debug.WriteLine($"? Error al abrir WhatsApp: {ex.Message}");
-            await DisplayAlert("? Error", $"No se pudo abrir WhatsApp: {ex.Message}", "OK");
+            await DisplayAlert("Error", $"No se pudo abrir WhatsApp: {ex.Message}", "OK");
         }
     }
 
     /// <summary>
-    /// Llamar al teléfono móvil
+    /// Llamar al telï¿½fono mï¿½vil
     /// </summary>
     private async void OnLlamarTelefonoClicked(object sender, EventArgs e)
     {
@@ -186,7 +186,7 @@ public partial class RecordatorioDetallePage : ContentPage
 
         if (string.IsNullOrWhiteSpace(_recordatorioDetalle.Telefono))
         {
-            await DisplayAlert("?? Advertencia", "No hay número de teléfono móvil disponible", "OK");
+            await DisplayAlert("Advertencia", "No hay numero de telefono movil disponible", "OK");
             return;
         }
 
@@ -194,7 +194,7 @@ public partial class RecordatorioDetallePage : ContentPage
     }
 
     /// <summary>
-    /// Llamar al teléfono de casa
+    /// Llamar al telï¿½fono de casa
     /// </summary>
     private async void OnLlamarTelefonoCasaClicked(object sender, EventArgs e)
     {
@@ -202,7 +202,7 @@ public partial class RecordatorioDetallePage : ContentPage
 
         if (string.IsNullOrWhiteSpace(_recordatorioDetalle.TelefonoCasa))
         {
-            await DisplayAlert("?? Advertencia", "No hay número de teléfono de casa disponible", "OK");
+            await DisplayAlert("Advertencia", "No hay numero de telï¿½fono de casa disponible", "OK");
             return;
         }
 
@@ -210,7 +210,7 @@ public partial class RecordatorioDetallePage : ContentPage
     }
 
     /// <summary>
-    /// Enviar correo electrónico con recordatorio
+    /// Enviar correo electrï¿½nico con recordatorio
     /// </summary>
     private async void OnEnviarCorreoClicked(object sender, EventArgs e)
     {
@@ -218,7 +218,7 @@ public partial class RecordatorioDetallePage : ContentPage
 
         if (string.IsNullOrWhiteSpace(_recordatorioDetalle.Correo) || _recordatorioDetalle.Correo == "Sin Correo Registrado")
         {
-            await DisplayAlert("?? Advertencia", "No hay correo electrónico disponible", "OK");
+            await DisplayAlert("Advertencia", "No hay correo electronico disponible", "OK");
             return;
         }
 
@@ -246,43 +246,43 @@ public partial class RecordatorioDetallePage : ContentPage
         catch (Exception ex)
         {
             Debug.WriteLine($"? Error al abrir correo: {ex.Message}");
-            await DisplayAlert("? Error", $"No se pudo abrir el cliente de correo: {ex.Message}", "OK");
+            await DisplayAlert("Error", $"No se pudo abrir el cliente de correo: {ex.Message}", "OK");
         }
     }
 
     /// <summary>
-    /// Realizar llamada telefónica
+    /// Realizar llamada telefï¿½nica
     /// </summary>
     private async Task RealizarLlamada(string telefono)
     {
         if (string.IsNullOrWhiteSpace(telefono))
         {
-            await DisplayAlert("?? Advertencia", "No hay número de teléfono disponible", "OK");
+            await DisplayAlert("Advertencia", "No hay nï¿½mero de telï¿½fono disponible", "OK");
             return;
         }
 
         try
         {
-            Debug.WriteLine($"?? Realizando llamada a: {telefono}");
+            Debug.WriteLine($"Realizando llamada a: {telefono}");
 
-            // Limpiar el número
+            // Limpiar el nï¿½mero
             var telefonoLimpio = LimpiarNumeroTelefono(telefono);
 
             // PhoneDialer de MAUI
             if (PhoneDialer.Default.IsSupported)
             {
                 PhoneDialer.Default.Open(telefonoLimpio);
-                Debug.WriteLine("? Llamada iniciada");
+                Debug.WriteLine(" Llamada iniciada");
             }
             else
             {
-                await DisplayAlert("? Error", "El dispositivo no soporta llamadas telefónicas", "OK");
+                await DisplayAlert("? Error", "El dispositivo no soporta llamadas telefï¿½nicas", "OK");
             }
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"? Error al realizar llamada: {ex.Message}");
-            await DisplayAlert("? Error", $"No se pudo realizar la llamada: {ex.Message}", "OK");
+            await DisplayAlert("Error", $"No se pudo realizar la llamada: {ex.Message}", "OK");
         }
     }
 
@@ -301,7 +301,7 @@ public partial class RecordatorioDetallePage : ContentPage
             _ => "recordatorio"
         };
 
-        var Final = " y mantener su garantía.";
+        var Final = " y mantener su garantia.";
         if (_recordatorioDetalle.TipoProximoServicio == "Servicio Externo")
         {
             Final = ".";
@@ -310,39 +310,39 @@ public partial class RecordatorioDetallePage : ContentPage
 
 Estimado(a) *{_recordatorioDetalle.ClienteNombre}*,
 
-Le recordamos que su vehículo *{_recordatorioDetalle.InfoVehiculo}* tiene programado su próximo servicio.
+Le recordamos que su vehiculo *{_recordatorioDetalle.InfoVehiculo}* tiene programado su proximo servicio.
 
-*INFORMACIÓN DEL SERVICIO*
-• Tipo: {_recordatorioDetalle.TipoProximoServicio}
-• Fecha: {_recordatorioDetalle.FechaProximoServicioFormateada}
-• Kilometraje: {(_recordatorioDetalle.KilometrajeProximoServicio.HasValue ? $"{_recordatorioDetalle.KilometrajeProximoServicio:N0} km" : "N/A")} 
-• Faltan {_recordatorioDetalle.DiasParaProximoServicio} días
+*INFORMACION DEL SERVICIO*
+* Tipo: {_recordatorioDetalle.TipoProximoServicio}
+* Fecha: {_recordatorioDetalle.FechaProximoServicioFormateada}
+* Kilometraje: {(_recordatorioDetalle.KilometrajeProximoServicio.HasValue ? $"{_recordatorioDetalle.KilometrajeProximoServicio:N0} km" : "N/A")} 
+* Faltan {_recordatorioDetalle.DiasParaProximoServicio} dias
 
 Este es su *{tipoRecordatorioTexto}*.
-Le recomendamos agendar su cita para conservar su vehículo en óptimas condiciones{Final}
+Le recomendamos agendar su cita para conservar su vehï¿½culo en optimas condiciones{Final}
 
 *CONTACTO*
-Teléfono: 771 183 9338
+Telefono: 771 183 9338
 
-¡Gracias por su preferencia!";
+Â¡Gracias por su preferencia!";
 
 
-          return mensaje;
+        return mensaje;
 
     }
 
     /// <summary>
-    /// Limpia un número de teléfono quitando caracteres no numéricos
+    /// Limpia un nï¿½mero de telï¿½fono quitando caracteres no numï¿½ricos
     /// </summary>
     private string LimpiarNumeroTelefono(string telefono)
     {
         if (string.IsNullOrWhiteSpace(telefono))
             return string.Empty;
 
-        // Mantener el + si está al inicio, quitar todo lo demás excepto números
+        // Mantener el + si estï¿½ al inicio, quitar todo lo demï¿½s excepto nï¿½meros
         var limpio = new string(telefono.Where(c => char.IsDigit(c) || c == '+').ToArray());
 
-        // Asegurar que el + solo esté al inicio
+        // Asegurar que el + solo estï¿½ al inicio
         if (limpio.Contains('+'))
         {
             limpio = "+" + limpio.Replace("+", "");
@@ -360,7 +360,7 @@ Teléfono: 771 183 9338
         await DisplayAlert("Agendar Cita", "Selecciona un Horario Disponible en la agenda", "OK");
         try
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new AgendaCitas(0, _recordatorioDetalle.ClienteId,_recordatorioDetalle.VehiculoId ));
+            await Application.Current.MainPage.Navigation.PushAsync(new AgendaCitas(0, _recordatorioDetalle.ClienteId, _recordatorioDetalle.VehiculoId));
         }
         catch (Exception ex)
         {
@@ -374,8 +374,8 @@ Teléfono: 771 183 9338
     {
         bool confirmar = await DisplayAlert(
             "Confirmar",
-            "¿Marcar este recordatorio como enviado?",
-            "Sí",
+            "Marcar este recordatorio como enviado?",
+            "Si",
             "No");
 
         if (confirmar)
@@ -391,7 +391,7 @@ Teléfono: 771 183 9338
 
                 if (response.Success)
                 {
-                    await DisplayAlert(" Éxito", "Recordatorio marcado como enviado", "OK");
+                    await DisplayAlert(" Exito", "Recordatorio marcado como enviado", "OK");
                     await Navigation.PopAsync();
                 }
                 else

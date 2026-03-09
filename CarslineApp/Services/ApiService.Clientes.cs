@@ -120,21 +120,12 @@ namespace CarslineApp.Services
             try
             {
                 var response = await _httpClient.PostAsJsonAsync($"{BaseUrl}/Clientes/crear", request);
+                var result = await response.Content.ReadFromJsonAsync<ClienteResponse>();
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadFromJsonAsync<ClienteResponse>();
-                    return result ?? new ClienteResponse
-                    {
-                        Success = false,
-                        Message = "Error al procesar la respuesta"
-                    };
-                }
-
-                return new ClienteResponse
+                return result ?? new ClienteResponse
                 {
                     Success = false,
-                    Message = "Error en la solicitud"
+                    Message = "Error al procesar la respuesta"
                 };
             }
             catch (Exception ex)
@@ -156,20 +147,12 @@ namespace CarslineApp.Services
                     request
                 );
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var resultado = await response.Content.ReadFromJsonAsync<ClienteResponse>();
-                    return resultado ?? new ClienteResponse
-                    {
-                        Success = false,
-                        Message = "Error al deserializar respuesta"
-                    };
-                }
+                var resultado = await response.Content.ReadFromJsonAsync<ClienteResponse>();
 
-                return new ClienteResponse
+                return resultado ?? new ClienteResponse
                 {
                     Success = false,
-                    Message = $"Error en la solicitud: {response.StatusCode}"
+                    Message = "Error al deserializar respuesta"
                 };
             }
             catch (Exception ex)
@@ -181,6 +164,5 @@ namespace CarslineApp.Services
                 };
             }
         }
-
     }
 }

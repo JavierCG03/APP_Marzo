@@ -37,7 +37,7 @@ namespace CarslineApp.ViewModels.ViewModelsHome
             RefreshCommand = new Command(async () => await CargarRecordatoriosPorTipo(_tipoRecordatorioActual));
             LogoutCommand = new Command(async () => await CerrarSesion());
             VerAgendaCommand = new Command(async () => await VerAgenda(), () => !IsLoading);
-     
+
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace CarslineApp.ViewModels.ViewModelsHome
         public ICommand RefreshCommand { get; }
         public ICommand LogoutCommand { get; }
         public ICommand VerAgendaCommand { get; }
-        
+
 
         #endregion
 
@@ -127,16 +127,26 @@ namespace CarslineApp.ViewModels.ViewModelsHome
             await CargarRecordatoriosPorTipo(1);
         }
 
+        /// <summary>
+        /// Recargar los recordatorios del tipo actualmente visible.
+        /// Se llama desde OnAppearing para reflejar cambios (ej: marcado como enviado).
+        /// </summary>
+        public async Task RecargarRecordatoriosActualesAsync()
+        {
+            Debug.WriteLine($"🔄 Recargando recordatorios tipo {_tipoRecordatorioActual}...");
+            await CargarRecordatoriosPorTipo(_tipoRecordatorioActual);
+        }
+
         #endregion
 
         #region Métodos Privados
 
-        private async Task VerAgenda ()
+        private async Task VerAgenda()
         {
             try
             {
                 IsLoading = true;
-                await Application.Current.MainPage.Navigation.PushAsync(new AgendaCitas(0,0,0));
+                await Application.Current.MainPage.Navigation.PushAsync(new AgendaCitas(0, 0, 0));
             }
             catch (Exception ex)
             {

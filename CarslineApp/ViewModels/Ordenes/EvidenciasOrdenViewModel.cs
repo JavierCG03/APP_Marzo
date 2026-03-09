@@ -153,9 +153,10 @@ namespace CarslineApp.ViewModels
                 "Interior Delantero",
                 "Interior Trasero",
                 "Tablero",
-                "Llantas",
                 "Motor",
-                "Cajuela"
+                "Cajuela",
+                "Detalle Especifico"
+
             };
 
             foreach (var tipo in tipos)
@@ -308,7 +309,7 @@ namespace CarslineApp.ViewModels
 
                 var imagenOriginal = memoryStream.ToArray();
 
-                evidencia.ImagenBytes = await ComprimirImagen(imagenOriginal, calidadJpeg: 80, anchoMaximo: 1280);
+                evidencia.ImagenBytes = await ComprimirImagen(imagenOriginal, calidadJpeg: 90, anchoMaximo: 1280);
                 evidencia.NombreArchivo = photo.FileName;
                 evidencia.TieneImagen = true;
 
@@ -318,7 +319,7 @@ namespace CarslineApp.ViewModels
                 ((Command)GuardarEvidenciasCommand).ChangeCanExecute();
             }
         }
-        private async Task<byte[]> ComprimirImagen(byte[] imagenOriginal, int calidadJpeg = 80, int anchoMaximo = 1280)
+        private async Task<byte[]> ComprimirImagen(byte[] imagenOriginal, int calidadJpeg = 90, int anchoMaximo = 1280)
         {
             try
             {

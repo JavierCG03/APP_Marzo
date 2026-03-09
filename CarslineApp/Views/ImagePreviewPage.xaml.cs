@@ -55,6 +55,16 @@ namespace CarslineApp.Views
         {
             try
             {
+
+                // ✅ Confirmación antes de descargar
+                bool confirmar = await DisplayAlert(
+                    "Descargar Fotografia",
+                    "¿Deseas guardar la imagen en el dispositivo?",
+                    "Descargar",
+                    "Cancelar");
+
+                if (!confirmar) return;
+
                 LoadingIndicator.IsVisible = true;
                 LoadingIndicator.IsRunning = true;
 

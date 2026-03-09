@@ -55,6 +55,7 @@ namespace CarslineApp.ViewModels.ViewModelsHome
             await CargarCitas();
         }
 
+
         #region Propiedades
 
         public string NombreUsuarioActual
@@ -218,21 +219,14 @@ namespace CarslineApp.ViewModels.ViewModelsHome
             if (string.IsNullOrWhiteSpace(trabajo.Trabajo))
                 return false;
 
-            // Verificar si el nombre del trabajo contiene 
-            // alguna palabra clave de trabajos sin refacciones
-            return !TrabajossinRefacciones.Any(t =>
-                trabajo.Trabajo.Contains(t, StringComparison.OrdinalIgnoreCase));
+            return !TrabajossinRefacciones.Any(t =>trabajo.Trabajo.Contains(t, StringComparison.OrdinalIgnoreCase));
         }
         private async Task CargarCitas()
         {
             IsLoading = true;
             try
             {
-                var citasList = await _apiService
-                    .ObtenerTrabajosCitasPorFechaAsync(
-                        TipoCitaSeleccionado,
-                        FechaSeleccionada);
-
+                var citasList = await _apiService.ObtenerTrabajosCitasPorFechaAsync(TipoCitaSeleccionado,FechaSeleccionada);
                 System.Diagnostics.Debug.WriteLine(
                     $"📦 Órdenes recibidas: {citasList?.Count ?? 0}");
 
@@ -336,85 +330,6 @@ namespace CarslineApp.ViewModels.ViewModelsHome
                 IsLoading = false;
             }
         }
-        /*
-        private async Task CargarCitas()
-        {
-            IsLoading = true;
-
-            try
-            {
-                var citasList = await _apiService.ObtenerTrabajosCitasPorFechaAsync(TipoCitaSeleccionado, FechaSeleccionada);
-                System.Diagnostics.Debug.WriteLine($"📦 Órdenes recibidas: {citasList?.Count ?? 0}");
-                if (citasList == null || !citasList.Any())
-                {
-                    TodasLasCitasAgrupadas = new ObservableCollection<GrupoCitas>();
-                    return;
-                }
-                // Separar oredenes cuyas refaccioens de trabajos ya estan listas
-                var citasListas = new List<CitaConTrabajosDto>();
-                var citasPendientes = new List<CitaConTrabajosDto>();
-
-
-                foreach (var cita in citasList)
-                {
-                    if (cita != null)
-                    {
-                        if (cita.Trabajos.All(t => t.RefaccionesListas))
-                        {
-                            citasListas.Add(cita);
-                            cita.RefaccionesListas = true;
-                        }
-                        else
-                        {
-                            citasPendientes.Add(cita);
-                            cita.RefaccionesListas = false;
-                        }
-                        EnriquecerCita(cita);
-                    }
-                }
-
-                var grupos = new ObservableCollection<GrupoCitas>();
-
-                if (citasPendientes.Any())
-                {
-                    grupos.Add(new GrupoCitas(
-                        "📋 Refacciones Pendientes",
-                        "#FFE5E5",// (string titulo, string backgroundColor, string borderColor, string textColor
-                        "#B00000",//
-                        "Black",//
-                        citasPendientes
-                    ));
-                }
-
-
-                if (citasListas.Any())
-                {
-                    grupos.Add(new GrupoCitas(
-                        "✅ Refacciones compradas",
-                        "#F1F8F4",
-                        "#4CAF50",
-                        "#404040",
-                        citasListas
-                    ));
-                }
-                TodasLasCitasAgrupadas = grupos;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"❌ ERROR: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert(
-                    "Error",
-                    $"Error al cargar citas: {ex.Message}",
-                    "OK");
-            }
-            finally
-            {
-                IsLoading = false;
-            }
-        }*/
-        /// <summary>
-        /// Enriquece la cita con propiedades calculadas para la UI
-        /// </summary>
         private void EnriquecerCita(CitaConTrabajosDto cita)
         {
             if (cita.RefaccionesListas)
