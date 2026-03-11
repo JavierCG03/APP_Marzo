@@ -107,11 +107,10 @@
         </intent>
         
         <!-- Intent para compartir -->
-        <intent>
-            <action android:name="android.intent.action.SEND"/>
-            <data android:mimeType="
-				  *"/>
-        </intent>
+		<intent>
+			<action android:name="android.intent.action.SEND"/>
+			<data android:mimeType="*/*"/>
+		</intent>
     </queries>
     
 </manifest>
