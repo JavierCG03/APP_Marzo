@@ -6,6 +6,7 @@ using CarslineApp.Models;
 using CarslineApp.Services;
 using CarslineApp.Views.ViewHome;
 using CarslineApp.Views;
+using CarslineApp.Views.Avaluo;
 
 namespace CarslineApp.ViewModels.ViewModelsHome
 {
@@ -29,6 +30,7 @@ namespace CarslineApp.ViewModels.ViewModelsHome
             // Comandos del menú lateral
             VerUsuariosCommand = new Command(async () => await OnVerUsuarios());
             VerInventarioCommand = new Command(async () => await OnVerInventario());
+            CrearAvaluoCommand = new Command(async () => await CrearAvaluo());
             LogoutCommand = new Command(async () => await OnLogout());
 
             // Comando del formulario
@@ -142,6 +144,7 @@ namespace CarslineApp.ViewModels.ViewModelsHome
         public ICommand LogoutCommand { get; }
         public ICommand VerUsuariosCommand { get; }
         public ICommand VerInventarioCommand { get; }
+        public ICommand CrearAvaluoCommand { get; }
 
         #endregion
 
@@ -214,7 +217,25 @@ namespace CarslineApp.ViewModels.ViewModelsHome
                 IsLoading = false;
             }
         }
-
+        private async Task CrearAvaluo()
+        {
+            try
+            {
+                IsLoading = true;
+                await Application.Current.MainPage.Navigation.PushAsync(new CrearAvaluoPage());
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    $"No se pudo abrir los Avaluos: {ex.Message}",
+                    "OK");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
         private async Task OnVerInventario()
         {
             try

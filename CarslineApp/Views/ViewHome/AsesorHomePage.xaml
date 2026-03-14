@@ -269,6 +269,23 @@
                                         HorizontalOptions="FillAndExpand"/>
                             </Grid>
                         </Frame>
+                        
+                        <!-- AVALUO -->
+                        <Frame Padding="0" 
+                               Margin="0,0,0,8" 
+                               CornerRadius="12" 
+                               HasShadow="False"
+                               BackgroundColor="Gray">
+                            <Button Text=" Crear Avaluo"
+                                    Command="{Binding CrearAvaluoCommand}"
+                                    BackgroundColor="Transparent"
+                                    TextColor="White"
+                                    FontSize="16"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="FillAndExpand"
+                                    HeightRequest="55"
+                                    Padding="15,0"/>
+                        </Frame>
 
                         <!-- SEPARADOR -->
                         <BoxView HeightRequest="1" BackgroundColor="#333" Margin="20,10"/>

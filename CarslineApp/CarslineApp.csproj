@@ -61,10 +61,15 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.8" />
 		<PackageReference Include="SkiaSharp" Version="3.119.2" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.2" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Core" Version="3.119.2" />
 	</ItemGroup>
 
 
 	<ItemGroup>
+	  <Compile Update="Views\Avaluo\CrearAvaluoPage.xaml.cs">
+	    <DependentUpon>CrearAvaluoPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Buscador\ClientesPage.xaml.cs">
 	    <DependentUpon>ClientesPage.xaml</DependentUpon>
 	  </Compile>
@@ -74,6 +79,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Views\Avaluo\AvaluoImagePreviewPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Avaluo\CrearAvaluoPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Avaluo\EquipamientoAvaluoPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Avaluo\FotosAvaluoPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Citas\AgendaCitas.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

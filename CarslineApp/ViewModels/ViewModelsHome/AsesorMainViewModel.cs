@@ -2,6 +2,7 @@
 using CarslineApp.Models;
 using CarslineApp.Services;
 using CarslineApp.Views.Buscador;
+using CarslineApp.Views.Avaluo;
 using CarslineApp.Views.ViewHome;
 using CarslineApp.Views.Citas;
 using CarslineApp.Views.Ordenes;
@@ -36,6 +37,7 @@ namespace CarslineApp.ViewModels.ViewModelsHome
             // Comandos de acciones
             CrearOrdenCommand = new Command(async () => await OnCrearOrden());
             CrearOrdenDesdeMenuCommand = new Command(async () => await OnCrearOrdenDesdeMenu());
+            CrearAvaluoCommand = new Command(async () => await CrearAvaluo());
             RefreshCommand = new Command(async () => await CargarOrdenes());
             CancelarOrdenCommand = new Command<int>(async (ordenId) => await CancelarOrden(ordenId));
             EntregarOrdenCommand = new Command<int>(async (ordenId) => await EntregarOrden(ordenId));
@@ -165,6 +167,7 @@ namespace CarslineApp.ViewModels.ViewModelsHome
         public ICommand TomarEvidenciasCommand { get; }
         public ICommand BuscadorCommand { get; }
         public ICommand VerAgendaCommand { get; }
+        public ICommand CrearAvaluoCommand { get; }
 
         #endregion
 
@@ -179,7 +182,25 @@ namespace CarslineApp.ViewModels.ViewModelsHome
             TipoOrdenSeleccionado = tipoOrden;
             await CargarOrdenes();
         }
-
+        private async Task CrearAvaluo()
+        {
+            try
+            {
+                IsLoading = true;
+                await Application.Current.MainPage.Navigation.PushAsync(new CrearAvaluoPage());
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    $"No se pudo abrir los Avaluos: {ex.Message}",
+                    "OK");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
         /// <summary>
         /// ✅ ACTUALIZADO: Ahora trabaja con el nuevo modelo que incluye trabajos
         /// </summary>

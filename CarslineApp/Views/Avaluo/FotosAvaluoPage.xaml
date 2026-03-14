@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CarslineApp.ViewModels"
+             x:Class="CarslineApp.Views.Avaluo.FotosAvaluoPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
+             Title="Fotos del Avalúo">
+
+    <ContentPage.BindingContext>
+        <vm:FotosAvaluoViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,25,*,Auto">
+
+        <!-- ════════════════════════════════════════ -->
+        <!-- HEADER FIJO                              -->
+        <!-- ════════════════════════════════════════ -->
+        <Frame Grid.Row="0"
+               BackgroundColor="#B00000"
+               CornerRadius="5"
+               Padding="15"
+               Margin="0,0,0,5">
+            <VerticalStackLayout Spacing="4">
+                <Grid ColumnDefinitions="Auto,*">
+                    <ImageButton Grid.Column="0"
+                                 Source="back.png"
+                                 BackgroundColor="Transparent"
+                                 HeightRequest="35"
+                                 WidthRequest="40"
+                                 Command="{Binding BackCommand}"
+                                 Padding="5"
+                                 CornerRadius="25"/>
+                    <Label Grid.Column="1"
+                           Text="📸 Fotos del Avalúo"
+                           TextColor="White"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Grid>
+                <Label Text="{Binding VehiculoCompleto}"
+                       TextColor="White"
+                       FontSize="15"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Mensaje de estado -->
+        <Label Grid.Row="1"
+               Text="{Binding MensajeEstado}"
+               TextColor="#B00000"
+               FontSize="13"
+               HorizontalOptions="Center"
+               IsVisible="{Binding MensajeEstado, Converter={StaticResource StringNotEmptyConverter}}"/>
+
+        <!-- ════════════════════════════════════════ -->
+        <!-- LISTA DE FOTOS                           -->
+        <!-- ════════════════════════════════════════ -->
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout Padding="16,0,16,10" Spacing="12">
+
+                <!-- Info del avalúo -->
+                <Grid ColumnDefinitions="80,*" RowDefinitions="Auto,Auto,Auto"
+                      ColumnSpacing="8" RowSpacing="2" Margin="0,4,0,8">
+                    <Label Grid.Column="0" Grid.Row="0"
+                           Text="Vehículo:"
+                           TextColor="#B00000" FontAttributes="Bold" FontSize="13"/>
+                    <Label Grid.Column="1" Grid.Row="0"
+                           Text="{Binding VehiculoCompleto}"
+                           FontSize="13" FontAttributes="Bold"/>
+                    <Label Grid.Column="0" Grid.Row="1"
+                           Text="VIN:"
+                           TextColor="#B00000" FontAttributes="Bold" FontSize="13"/>
+                    <Label Grid.Column="1" Grid.Row="1"
+                           Text="{Binding VIN}"
+                           FontSize="13"/>
+                    <Label Grid.Column="0" Grid.Row="2"
+                           Text="Cliente:"
+                           TextColor="#B00000" FontAttributes="Bold" FontSize="13"/>
+                    <Label Grid.Column="1" Grid.Row="2"
+                           Text="{Binding Cliente}"
+                           FontSize="13"/>
+                </Grid>
+
+                <!-- Items de fotos -->
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Fotos}" Spacing="10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,2"
+                                   Padding="14"
+                                   BackgroundColor="White"
+                                   BorderColor="#B00000"
+                                   CornerRadius="12">
+                                <Grid RowDefinitions="Auto,Auto"
+                                      ColumnDefinitions="*,Auto,Auto"
+                                      ColumnSpacing="8"
+                                      RowSpacing="8">
+
+                                    <!-- Título del tipo de foto -->
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding Descripcion}"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#333"
+                                           VerticalOptions="Center"/>
+
+                                    <!-- Botón Cámara -->
+                                    <ImageButton Grid.Row="0" Grid.Column="1"
+                                                 Source="camara.png"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FotosAvaluoViewModel}}, Path=TomarFotoCommand}"
+                                                 CommandParameter="{Binding Descripcion}"
+                                                 BackgroundColor="Transparent"
+                                                 WidthRequest="40" HeightRequest="40"
+                                                 HorizontalOptions="Center"
+                                                 VerticalOptions="Center"/>
+
+                                    <!-- Botón Galería -->
+                                    <ImageButton Grid.Row="0" Grid.Column="2"
+                                                 Source="importar.png"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FotosAvaluoViewModel}}, Path=SeleccionarFotoCommand}"
+                                                 CommandParameter="{Binding Descripcion}"
+                                                 BackgroundColor="Transparent"
+                                                 WidthRequest="40" HeightRequest="40"
+                                                 HorizontalOptions="Center"
+                                                 VerticalOptions="Center"/>
+
+                                    <!-- Preview de imagen + botones de acción -->
+                                    <Frame Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                           IsVisible="{Binding TieneFoto}"
+                                           Padding="0"
+                                           BackgroundColor="Transparent"
+                                           CornerRadius="8"
+                                           BorderColor="#E0E0E0">
+                                        <Image Source="{Binding ImagenPreview}"
+                                               Aspect="AspectFit"
+                                               HeightRequest="160">
+                                            <Image.GestureRecognizers>
+                                                <!-- Tap simple → Ver -->
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FotosAvaluoViewModel}}, Path=VerFotoCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </Frame>
+
+                                    <!-- Columna de acciones (Editar + Eliminar) -->
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="2"
+                                                        IsVisible="{Binding TieneFoto}"
+                                                        Spacing="8"
+                                                        VerticalOptions="End">
+
+                                        <!-- Editar/Anotar -->
+                                        <ImageButton
+                                            Source="editar.png"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FotosAvaluoViewModel}}, Path=EditarFotoCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="Transparent"
+                                            WidthRequest="38" HeightRequest="38"
+                                            HorizontalOptions="Center"
+                                            ToolTipProperties.Text="Añadir anotaciones"/>
+
+                                        <!-- Eliminar -->
+                                        <ImageButton
+                                            Source="borrar.png"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FotosAvaluoViewModel}}, Path=EliminarFotoCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="Transparent"
+                                            WidthRequest="38" HeightRequest="38"
+                                            HorizontalOptions="Center"
+                                            Margin="0,4,0,0"/>
+
+                                    </VerticalStackLayout>
+
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ════════════════════════════════════════ -->
+        <!-- BOTÓN GUARDAR FIJO                       -->
+        <!-- ════════════════════════════════════════ -->
+        <Button Grid.Row="3"
+                Text="💾 Guardar Fotos"
+                BackgroundColor="#B00000"
+                TextColor="White"
+                FontSize="18"
+                FontAttributes="Bold"
+                HeightRequest="55"
+                CornerRadius="10"
+                Margin="20,10,20,10"
+                Command="{Binding GuardarFotosCommand}"/>
+
+        <!-- Loading overlay -->
+        <Frame Grid.RowSpan="4"
+               IsVisible="{Binding IsLoading}"
+               BackgroundColor="#80000000"
+               Padding="0"
+               HasShadow="False"
+               CornerRadius="0">
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               Color="White"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               HeightRequest="50"
+                               WidthRequest="50"/>
+        </Frame>
+
+    </Grid>
+</ContentPage>

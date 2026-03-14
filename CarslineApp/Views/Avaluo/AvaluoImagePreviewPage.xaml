@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CarslineApp.Views.Avaluo.AvaluoImagePreviewPage"
+             BackgroundColor="#1A1A1A"
+             Title="Vista Previa">
+
+    <Grid RowDefinitions="56,*,60" ColumnDefinitions="*">
+
+        <!-- ═══ HEADER ═══ -->
+        <Grid Grid.Row="0"
+              BackgroundColor="#1A1A1A"
+              Padding="0"
+              ColumnDefinitions="50,*,50">
+
+            <Button Grid.Column="0"
+                    Text="←"
+                    FontSize="36"
+                    TextColor="White"
+                    BackgroundColor="Transparent"
+                    Clicked="OnBackClicked"
+                    Padding="5"
+                    CornerRadius="25"/>
+
+            <Label Grid.Column="1"
+                   x:Name="TituloLabel"
+                   Text="Vista Previa"
+                   TextColor="White"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   HorizontalTextAlignment="Center"/>
+
+            <!-- Botón editar — abre el editor desde el visualizador -->
+            <Button Grid.Column="2"
+                    Text="✏️"
+                    FontSize="20"
+                    TextColor="#FF9800"
+                    BackgroundColor="Transparent"
+                    Clicked="OnEditarClicked"
+                    Padding="5"
+                    ToolTipProperties.Text="Editar / Anotar"/>
+        </Grid>
+
+        <!-- ═══ IMAGEN ═══ -->
+        <Grid x:Name="ImageContainer"
+              Grid.Row="1"
+              Margin="10"
+              BackgroundColor="#1A1A1A">
+
+            <Image x:Name="PreviewImage"
+                   Aspect="AspectFit"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center">
+                <Image.GestureRecognizers>
+                    <PinchGestureRecognizer PinchUpdated="OnPinchUpdated"/>
+                    <PanGestureRecognizer   PanUpdated="OnPanUpdated"/>
+                    <TapGestureRecognizer   NumberOfTapsRequired="2" Tapped="OnDoubleTap"/>
+                </Image.GestureRecognizers>
+            </Image>
+
+            <ActivityIndicator x:Name="LoadingIndicator"
+                               IsRunning="False"
+                               IsVisible="False"
+                               Color="#B00000"
+                               Scale="1.5"/>
+        </Grid>
+
+        <!-- ═══ FOOTER ═══ -->
+        <Grid Grid.Row="2"
+              Margin="20,0,20,20"
+              ColumnDefinitions="50,50,*,50,Auto,50">
+
+            <ImageButton Grid.Column="0"
+                         Source="compartir.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40" HeightRequest="40"
+                         Clicked="OnShareClicked"/>
+
+            <ImageButton Grid.Column="1"
+                         Source="descargar.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40" HeightRequest="40"
+                         Clicked="OnDownloadClicked"/>
+
+            <ImageButton Grid.Column="2"
+                         Source="reset.png"
+                         HorizontalOptions="End"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40" HeightRequest="40"
+                         Clicked="OnResetClicked"/>
+
+            <ImageButton Grid.Column="3"
+                         Source="zoom.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40" HeightRequest="40"
+                         Clicked="OnZoomInClicked"/>
+
+            <Label Grid.Column="4"
+                   x:Name="ZoomLabel"
+                   Text="100%"
+                   TextColor="#00D4FF"
+                   FontSize="15"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"/>
+
+            <ImageButton Grid.Column="5"
+                         Source="zoomout.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40" HeightRequest="40"
+                         Clicked="OnZoomOutClicked"/>
+        </Grid>
+    </Grid>
+</ContentPage>
