@@ -112,9 +112,7 @@ namespace CarslineApp.ViewModels
 
             TomarFotoCommand = new Command<string>(async (tipo) => await TomarFotoAsync(tipo));
             SeleccionarFotoCommand = new Command<string>(async (tipo) => await SeleccionarFotoAsync(tipo));
-            GuardarFotosCommand = new Command(
-                async () => await GuardarFotosAsync(),
-                () => Fotos.Any(f => f.TieneFoto && f.FotoId == null));
+            GuardarFotosCommand = new Command(async () => await GuardarFotosAsync(),() => Fotos.Any(f => f.TieneFoto && f.FotoId == null));
             EliminarFotoCommand = new Command<FotoAvaluoItem>(async (foto) => await EliminarFotoAsync(foto));
             CargarFotosCommand = new Command(async () => await CargarFotosExistentesAsync());
             BackCommand = new Command(async () => await RegresarAsync());
@@ -189,13 +187,13 @@ namespace CarslineApp.ViewModels
                 IsLoading = true;
                 MensajeEstado = "Cargando información del avalúo...";
 
-                var response = await _apiService.ObtenerAvaluoCompletoAsync(avaluoId);
+                var response = await _apiService.ObtenerDatosSimplesAvaluosAsync(avaluoId);
 
-                if (response?.Avaluo != null)
+                if (response.Success)
                 {
-                    VehiculoCompleto = response.Avaluo.VehiculoCompleto;
-                    VIN = response.Avaluo.VIN;
-                    Cliente = response.Avaluo.NombreCompleto;
+                    VehiculoCompleto = response.VehiculoCompleto;
+                    VIN = response.VIN;
+                    Cliente = response.Vendedor;
                     MensajeEstado = string.Empty;
                 }
                 else
@@ -470,7 +468,7 @@ namespace CarslineApp.ViewModels
         #region ── Compresión + EXIF ─────────────────────────────────
         // ══════════════════════════════════════════════════════════════
 
-        private async Task<byte[]> ComprimirImagenAsync(byte[] original, int calidadJpeg = 90, int anchoMaximo = 1280)
+        private async Task<byte[]> ComprimirImagenAsync(byte[] original, int calidadJpeg = 70, int anchoMaximo = 1280)
         {
             try
             {

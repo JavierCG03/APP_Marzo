@@ -315,6 +315,15 @@ namespace CarslineApp.Models
         // Propiedades calculadas
         public string FechaFormateada => Fecha.ToString("dd/MMM/yyyy HH:mm");
     }
+    public class AvaluoDatosSimplesResponse
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public string Vendedor { get; set; } = string.Empty;
+        public string VehiculoCompleto { get; set; } = string.Empty;
+        public string VIN { get; set; } = string.Empty;
+
+    }
 
     // ============================================
     // VIEWMODEL para item de equipamiento en UI

@@ -1,6 +1,7 @@
 ﻿using CarslineApp.Models;
 using CarslineApp.Services;
 using CarslineApp.Views.Avaluo;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -13,6 +14,9 @@ namespace CarslineApp.ViewModels
         private int _avaluoId;
         private bool _isLoading;
         private string _errorMessage = string.Empty;
+        private string _vehiculoCompleto = string.Empty;
+        private string _vendedor = string.Empty;
+        private string _vin = string.Empty; 
 
         public static readonly List<string> MarcasLlantas =
             new() { "Bridgestone", "Michelin", "Continental", "Goodyear", "Pirelli",
@@ -144,39 +148,24 @@ namespace CarslineApp.ViewModels
             set { _errorMessage = value; OnPropertyChanged(); }
         }
 
-        public AvaluoDto? Avaluo
+        public string VehiculoCompleto
         {
-            get => _avaluo;
-            set
-            {
-                _avaluo = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(VehiculoCompleto));
-                OnPropertyChanged(nameof(InfoCliente));
-                OnPropertyChanged(nameof(InfoVin));
-                OnPropertyChanged(nameof(InfoKilometraje));
-            }
+            get => _vehiculoCompleto;
+            set { _vehiculoCompleto = value; OnPropertyChanged(); }
         }
+        public string Vendedor
+        {
+            get => _vendedor;
+            set { _vendedor = value; OnPropertyChanged(); }
+        }
+        public string Vin
+        {
+            get => _vin;
+            set { _vin = value; OnPropertyChanged(); }
+        }
+
         private string MimmaMarcaTrasera() =>
     MismaMarcaLlantas ? MarcaLlantasDelanteras : MarcaLlantasTraseras;
-
-
-        public string VehiculoCompleto => _avaluo != null
-            ? $"{_avaluo.Marca} {_avaluo.Modelo} {_avaluo.Version} {_avaluo.Anio}"
-            : "Cargando...";
-
-        public string InfoCliente => _avaluo != null
-            ? $"👤 {_avaluo.NombreCompleto}  ·  📞 {_avaluo.Telefono1}"
-            : string.Empty;
-
-        public string InfoVin => _avaluo != null
-            ? $"VIN: {_avaluo.VIN}  ·  Placas: {_avaluo.Placas}"
-            : string.Empty;
-
-        public string InfoKilometraje => _avaluo != null
-            ? $"🛣 {_avaluo.KilometrajeFormateado}  ·  {_avaluo.Color}"
-            : string.Empty;
-
 
         public bool TransmisionAutomatica
         {
@@ -418,9 +407,13 @@ namespace CarslineApp.ViewModels
             IsLoading = true;
             try
             {
-                var response = await _apiService.ObtenerAvaluoCompletoAsync(AvaluoId);
-                if (response.Success && response.Avaluo != null)
-                    Avaluo = response.Avaluo;
+                var response = await _apiService.ObtenerDatosSimplesAvaluosAsync(AvaluoId);
+                if (response.Success )
+                {
+                    VehiculoCompleto = response.VehiculoCompleto;
+                    Vendedor = response.Vendedor;
+                    Vin = response.VIN;
+                }
                 else
                     ErrorMessage = response.Message ?? "No se pudo cargar el avalúo";
             }

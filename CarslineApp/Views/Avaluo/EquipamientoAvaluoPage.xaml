@@ -24,10 +24,6 @@
                        FontAttributes="Bold"
                        TextColor="White"
                        HorizontalOptions="Center"/>
-                <Label Text="{Binding VehiculoCompleto}"
-                       FontSize="13"
-                       TextColor="#FFCDD2"
-                       HorizontalOptions="Center"/>
             </VerticalStackLayout>
         </Frame>
 
@@ -46,19 +42,52 @@
                        HasShadow="False"
                        CornerRadius="10">
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="{Binding VehiculoCompleto}"
-                               FontSize="16"
+                        <Grid RowDefinitions="25,*,*" ColumnDefinitions="Auto,*">
+                            <HorizontalStackLayout Grid.Row="1" Spacing="10">
+                                <Label 
+                                Text="Vehiculo:"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="Black"/>
+
+                                <Label 
+                               Text="{Binding VehiculoCompleto}"
+                               FontSize="13"
                                FontAttributes="Bold"
                                TextColor="#E65100"/>
-                        <Label Text="{Binding InfoCliente}"
+
+                            </HorizontalStackLayout>
+                            
+                            <HorizontalStackLayout Grid.Row="2" Spacing="10">
+                                <Label 
+                                Text="VIN :"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="Black"/>
+
+                                <Label 
+                                Text="{Binding Vin}"
+                               FontSize="12"
+                               TextColor="#757575"/>
+
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Grid.Row="0"  Spacing="10">
+                                <Label 
+                                Text="Vendedor :"
                                FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="Black"/>
+
+                                <Label
+                                Text="{Binding Vendedor}"
+                               FontSize="12"
                                TextColor="#404040"/>
-                        <Label Text="{Binding InfoVin}"
-                               FontSize="12"
-                               TextColor="#757575"/>
-                        <Label Text="{Binding InfoKilometraje}"
-                               FontSize="12"
-                               TextColor="#757575"/>
+
+                            </HorizontalStackLayout>
+                            
+                        </Grid>
+
                     </VerticalStackLayout>
                 </Frame>
 
@@ -72,8 +101,9 @@
                        CornerRadius="10">
                     <VerticalStackLayout Spacing="10">
 
-                        <Label Text="⚡ Electrónico / Confort"
+                        <Label Text=" Electrónico / Confort"
                                FontSize="15"
+                               HorizontalOptions="Center"
                                FontAttributes="Bold"
                                TextColor="#B00000"/>
 
@@ -84,81 +114,81 @@
                             <!-- Columna izquierda -->
                             <Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding ACC}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="ACC" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="ACC" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="1" Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="6">
-                                <CheckBox Grid.Column="0" IsChecked="{Binding Quemacocos}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Quemacocos" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <CheckBox Grid.Column="0" IsChecked="{Binding Quemacocos}" Color="#B00000"  VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="Quemacocos" FontSize="14" VerticalOptions="Center"  FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="2" Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding EspejosElectricos}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Espejos Eléct." FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Espejos Eléct." FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="3" Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding SegurosElectricos}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Seguros Eléct." FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Seguros Eléct." FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="4" Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding CristalesElectricos}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Cristales Eléct." FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Cristales Eléct." FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="5" Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding AsientosElectricos}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Asientos Eléct." FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Asientos Eléct." FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="6" Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding FarosNiebla}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Faros de Niebla" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Faros de Niebla" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="7" Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding RinesAluminio}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Rines Aluminio" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Rines Aluminio" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="8" Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding ControlesVolante}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Ctrl. Volante" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Controles al Volante" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="9" Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding EstereoCD}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Estéreo / CD" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Estéreo / CD" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="10" Grid.Column="0" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding ABS}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="ABS" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="ABS" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
 
                             <!-- Columna derecha -->
                             <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding DireccionAsistida}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Dir. Asistida" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Dir. Asistida" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding BolsasAire}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Bolsas de Aire" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Bolsas de Aire" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding Bluetooth}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Bluetooth" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Bluetooth" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="3" Grid.Column="1" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding USB}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Puerto USB" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Puerto USB" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="4" Grid.Column="1" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding Pantalla}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Pantalla" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Pantalla" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="5" Grid.Column="1" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding GPS}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="GPS" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="GPS" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="6" Grid.Column="1" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding Turbo}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Turbo" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Turbo" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
                             <Grid Grid.Row="7" Grid.Column="1" ColumnDefinitions="Auto,*" ColumnSpacing="6">
                                 <CheckBox Grid.Column="0" IsChecked="{Binding Traccion4x4}" Color="#B00000" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="Tracción 4x4" FontSize="14" VerticalOptions="Center" TextColor="#212121"/>
+                                <Label Grid.Column="1" Text="Tracción 4x4" FontSize="14" VerticalOptions="Center" FontAttributes="Bold" TextColor="#212121"/>
                             </Grid>
 
                         </Grid>
@@ -171,28 +201,29 @@
                                TextColor="#404040"/>
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                             <Border Grid.Column="0"
-                                    BackgroundColor="{Binding TransmisionAutomatica, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#E8F5E9|#F5F5F5'}"
-                                    Stroke="{Binding TransmisionAutomatica, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#43A047|#BDBDBD'}"
+                                    BackgroundColor="{Binding TransmisionAutomatica, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#FF0000|#FFFFFF'}"
+                                    Stroke="Black"
                                     StrokeThickness="1.5"
                                     StrokeShape="RoundRectangle 10"
                                     Padding="10,8">
                                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
                                     <CheckBox Grid.Column="0" IsChecked="{Binding TransmisionAutomatica}" Color="#43A047" VerticalOptions="Center"/>
                                     <Label Grid.Column="1" Text="Automática" FontSize="14" FontAttributes="Bold"
-                                           TextColor="{Binding TransmisionAutomatica, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#2E7D32|#212121'}" 
-                                           VerticalOptions="Center"/>
+                                       TextColor="{Binding TransmisionAutomatica, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#FFFFFF|#212121'}"
+                                       VerticalOptions="Center"/>
                                 </Grid>
                             </Border>
+
                             <Border Grid.Column="1"
-                                    BackgroundColor="{Binding TransmisionManual, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#E8F5E9|#F5F5F5'}"
-                                    Stroke="{Binding TransmisionManual, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#43A047|#BDBDBD'}"
+                                    BackgroundColor="{Binding TransmisionManual, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#FF0000|#FFFFFF'}"
+                                    Stroke="Black"
                                     StrokeThickness="1.5"
                                     StrokeShape="RoundRectangle 10"
                                     Padding="10,8">
                                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
                                     <CheckBox Grid.Column="0" IsChecked="{Binding TransmisionManual}" Color="#43A047" VerticalOptions="Center"/>
-                                    <Label Grid.Column="1" Text="🔧 Manual" FontSize="14" FontAttributes="Bold"
-                                           TextColor="{Binding TransmisionManual, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#2E7D32|#212121'}"
+                                    <Label Grid.Column="1" Text="Manual" FontSize="14" FontAttributes="Bold"
+                                           TextColor="{Binding TransmisionManual, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#FFFFFF|#212121'}"
                                            VerticalOptions="Center"/>
                                 </Grid>
                             </Border>

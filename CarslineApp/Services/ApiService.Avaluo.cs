@@ -251,6 +251,45 @@ namespace CarslineApp.Services
         // ============================================
 
         /// <summary>
+        /// Obtener Datos Simples Avaluo por ID (Nobre del cliente + Vehiculo Completo+ VIN)
+        /// GET api/Avaluos/Avaluos/DatosSimpelesAvaluo/{id}
+        /// </summary>
+        public async Task<AvaluoDatosSimplesResponse> ObtenerDatosSimplesAvaluosAsync(int avaluoId)
+        {
+            try
+            {
+                Debug.WriteLine($"📋 Obteniendo Datos simles de avaluo ID: {avaluoId}");
+                var response = await _httpClient.GetAsync($"{BaseUrl}/Avaluos/DatosSimpelesAvaluo/{avaluoId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var result = JsonSerializer.Deserialize<AvaluoDatosSimplesResponse>(
+                        json,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    Debug.WriteLine("✅ Avalúo  obtenido");
+                    return result ?? new AvaluoDatosSimplesResponse { Success = false, Message = "Error al procesar respuesta" };
+                }
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    return new AvaluoDatosSimplesResponse { Success = false, Message = "Avalúo no encontrado" };
+
+                return new AvaluoDatosSimplesResponse
+                {
+                    Success = false,
+                    Message = $"Error: {response.StatusCode}"
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"❌ Error en ObtenerDatosSimplesAvaluoAsync: {ex.Message}");
+                return new AvaluoDatosSimplesResponse { Success = false, Message = $"Error: {ex.Message}" };
+            }
+
+
+        }
+        /// <summary>
         /// Obtener avalúo completo por ID (datos + equipamiento + reparaciones + fotos)
         /// GET api/Avaluos/{id}
         /// </summary>
